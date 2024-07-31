@@ -42,8 +42,8 @@ export const Tooltip = ({
     }
 
     return () => {
-      removeEventListener('click', cancelActive);
-      removeEventListener('scroll', cancelActive);
+      window.removeEventListener('click', cancelActive);
+      window.removeEventListener('scroll', cancelActive);
     };
   }, [isActive]);
 
