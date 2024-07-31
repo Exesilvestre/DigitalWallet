@@ -2,6 +2,7 @@ package com.example.gateway;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 public class SecurityConfig {
@@ -17,5 +18,12 @@ public class SecurityConfig {
                 );
 
         return http.build();
+    }
+
+    @Bean
+    public StrictHttpFirewall allowDoubleSlash() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedDoubleSlash(true); // Permite "//" en la URL
+        return firewall;
     }
 }

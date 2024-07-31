@@ -1,83 +1,30 @@
-import React, { createContext, useState, useEffect, useRef, ReactNode } from 'react';
-import Keycloak from 'keycloak-js';
-import { useNavigate } from 'react-router-dom';
+/* eslint-disable @typescript-eslint/no-empty-function */
+import React, { createContext, useState, SetStateAction } from 'react';
+import { useLocalStorage } from '../../hooks';
 
-interface AuthContextType {
+export const AuthContext = createContext<{
   isAuthenticated: boolean;
-  token: string | undefined;
-  login: () => void;
+  setIsAuthenticated: React.Dispatch<SetStateAction<boolean>>;
   logout: () => void;
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
-}
-
-const client = new Keycloak({
-  realm: 'dh-money',
-  url: 'http://localhost:8080', // URL base del servidor Keycloak
-  clientId: 'dh-money-app',
-});
-
-export const AuthContext = createContext<AuthContextType>({
+}>({
   isAuthenticated: false,
-  token: undefined,
-  login: () => {},
-  logout: () => {},
   setIsAuthenticated: () => {},
+  logout: () => {},
 });
 
-const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const isRun = useRef(false);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [token, setToken] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    if (isRun.current) return;
-    isRun.current = true;
-
-    const initializeKeycloak = async () => {
-      try {
-        const authenticated = await client.init({
-          onLoad: 'login-required',
-          checkLoginIframe: false,
-          redirectUri: 'http://localhost:3000/', // URL específica para redireccionar después de la autenticación
-        });
-
-        if (authenticated) {
-          setIsAuthenticated(true);
-          setToken(client.token || undefined);
-          localStorage.setItem('token', client.token || ''); // Guarda el token en localStorage
-
-          client.onAuthSuccess = () => {
-            setToken(client.token || undefined);
-            localStorage.setItem('token', client.token || ''); // Actualiza el token en localStorage
-          };
-
-          client.onAuthError = () => setIsAuthenticated(false);
-          client.onAuthLogout = () => {
-            setIsAuthenticated(false);
-            localStorage.removeItem('token'); // Remueve el token de localStorage
-          };
-        } else {
-          setIsAuthenticated(false);
-        }
-      } catch (error) {
-        console.error('Error initializing Keycloak', error);
-        setIsAuthenticated(false);
-      }
-    };
-
-    initializeKeycloak();
-  }, []);
-
-  const login = () => {
-    client.login();
-  };
+const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [token, setToken] = useLocalStorage('token');
+  const [isAuthenticated, setIsAuthenticated] = useState(!!token);
 
   const logout = () => {
-    client.logout({ redirectUri: 'http://localhost:3000/' });
+    setIsAuthenticated(false);
+    setToken(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, token, login, logout, setIsAuthenticated }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, setIsAuthenticated, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

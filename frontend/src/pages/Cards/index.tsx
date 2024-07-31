@@ -26,13 +26,9 @@ import {
   UNAUTHORIZED,
 } from '../../constants';
 import { useSearchParams } from 'react-router-dom';
-import {
-  default as CardsComponent,
-  Focused,
-  ReactCreditCardsProps,
-} from 'react-credit-cards-2';
+import Cards, { Focused } from 'react-credit-cards-2';
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -55,12 +51,12 @@ import { useUserInfo, useLocalStorage, useAuth } from '../../hooks';
 
 const recordsPerPage = 10;
 const duration = 2000;
-const Cards = () => {
+
+const CardsComponent = () => {
   const [userCards, setUserCards] = useState<IRecord[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } =
-    usePagination(userCards as RecordProps[], recordsPerPage);
+  const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } = usePagination(userCards as RecordProps[], recordsPerPage);
   const [searchParams] = useSearchParams();
   const isAdding = !!searchParams.get('add');
   const isSuccess = !!searchParams.get('success');
@@ -103,9 +99,7 @@ const Cards = () => {
             className="tw-max-w-5xl"
             content={
               <div className="tw-flex tw-justify-between tw-mb-4">
-                <p className="tw-font-bold">
-                  Agregá tu tarjeta de débito o crédito
-                </p>
+                <p className="tw-font-bold">Agregá tu tarjeta de débito o crédito</p>
               </div>
             }
             actions={
@@ -179,17 +173,23 @@ const Cards = () => {
   );
 };
 
-export default Cards;
+export default CardsComponent;
 
 function CardForm() {
   const {
     register,
     handleSubmit,
     formState: { errors, isDirty },
-  } = useForm<ReactCreditCardsProps>({
+  } = useForm({
     criteriaMode: 'all',
   });
-  const [formState, setFormState] = useState<ReactCreditCardsProps>({
+  const [formState, setFormState] = useState<{
+    number: string;
+    name: string;
+    expiry: string;
+    cvc: string;
+    focused?: string | undefined;
+  }>({
     number: '',
     name: '',
     expiry: '',
@@ -208,15 +208,15 @@ function CardForm() {
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     maxLength?: number
-  ) => handleChange<ReactCreditCardsProps>(event, setFormState, maxLength);
+  ) => handleChange(event, setFormState, maxLength);
 
   const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-    setFormState({ ...formState, focused: event.target.name as Focused });
+    setFormState({ ...formState, focused: event.target.name });
   };
 
-  const onSubmit: SubmitHandler<ReactCreditCardsProps> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
     const { expiry, number, name, cvc } = data;
-    transformExpiration(expiry as number);
+    transformExpiration(expiry);
     if (user && user.id) {
       createUserCard(
         user.id,
@@ -253,10 +253,10 @@ function CardForm() {
               <p className="tw-font-bold">Agregá una nueva tarjeta</p>
             </div>
             <div className="tw-mb-5">
-              <CardsComponent
+              <Cards
                 cvc={formState.cvc}
                 expiry={formState.expiry}
-                focused={formState.focused}
+                focused={formState.focused as Focused}
                 name={formState.name}
                 number={formState.number}
                 placeholders={{
@@ -273,9 +273,7 @@ function CardForm() {
             >
               <div>
                 <FormControl variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-number">
-                    Número
-                  </InputLabel>
+                  <InputLabel htmlFor="outlined-adornment-number">Número</InputLabel>
                   <OutlinedInput
                     id="outlined-adornment-number"
                     type="number"
@@ -293,9 +291,7 @@ function CardForm() {
               </div>
               <div>
                 <FormControl variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-name">
-                    Nombre
-                  </InputLabel>
+                  <InputLabel htmlFor="outlined-adornment-name">Nombre</InputLabel>
                   <OutlinedInput
                     id="outlined-adornment-name"
                     type="text"
@@ -311,9 +307,7 @@ function CardForm() {
               </div>
               <div>
                 <FormControl variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-expiry">
-                    Válida hasta
-                  </InputLabel>
+                  <InputLabel htmlFor="outlined-adornment-expiry">Válida hasta</InputLabel>
                   <OutlinedInput
                     id="outlined-adornment-expiry"
                     type="number"

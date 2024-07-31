@@ -24,6 +24,7 @@ function App() {
 
   return (
     <>
+      <BrowserRouter>
         <Layout isAuthenticated={isAuthenticated}>
           <Suspense
             fallback={
@@ -70,6 +71,7 @@ function App() {
             </Routes>
           </Suspense>
         </Layout>
+      </BrowserRouter>
     </>
   );
 }

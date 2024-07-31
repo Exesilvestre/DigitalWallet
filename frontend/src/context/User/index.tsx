@@ -1,17 +1,16 @@
 import React, { createContext, useEffect, useReducer } from 'react';
 import userReducer from './userReducer';
 import { User } from '../../types';
-import { useAuth } from '../../hooks';
+import { useAuth, useLocalStorage } from '../../hooks';
 import { getUser, parseJwt } from '../../utils';
 import { userActionTypes } from './types';
 import { UNAUTHORIZED } from '../../constants/status';
-
 export interface UserInfoState {
   user: User | null;
   loading: boolean;
 }
 
-const initialState: UserInfoState = {
+const initialState : UserInfoState = {
   user: null,
   loading: true,
 };
@@ -27,11 +26,13 @@ export const userInfoContext = createContext<{
 
 const UserInfoProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(userReducer, initialState);
+  const [token, setToken] = useLocalStorage('token');
+
   const { isAuthenticated, setIsAuthenticated } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
-      const token = localStorage.getItem('token');
+      const token = window.localStorage.getItem('token');
       if (token) {
         const info = parseJwt(token);
         const userId = info && info.sub;
@@ -40,21 +41,23 @@ const UserInfoProvider = ({ children }: { children: React.ReactNode }) => {
             .then((res) => {
               dispatch({ type: userActionTypes.SET_USER, payload: res });
               dispatch({
-                type: userActionTypes.SET_USER_LOADING, payload: false,
+                type: userActionTypes.SET_USER_LOADING,
+                payload: false,
               });
             })
             .catch((error) => {
               if (error.status === UNAUTHORIZED) {
-                localStorage.removeItem('token');
+                setToken(null);
                 setIsAuthenticated(false);
               }
+              // eslint-disable-next-line no-console
               console.log(error);
             });
       } else {
         setIsAuthenticated(false);
       }
     }
-  }, [dispatch, isAuthenticated, setIsAuthenticated]);
+  }, [dispatch, isAuthenticated, setIsAuthenticated, setToken, token]);
 
   return (
     <userInfoContext.Provider

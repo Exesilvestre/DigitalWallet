@@ -25,7 +25,7 @@
 }
 
 /*
-! tailwindcss v3.4.4 | MIT License | https://tailwindcss.com
+! tailwindcss v3.1.8 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -56,13 +56,9 @@
 2. Prevent adjustments of font size after orientation changes in iOS.
 3. Use a more readable tab size.
 4. Use the user's configured `sans` font-family by default.
-5. Use the user's configured `sans` font-feature-settings by default.
-6. Use the user's configured `sans` font-variation-settings by default.
-7. Disable tap highlights on iOS
 */
 
-html,
-:host {
+html {
   line-height: 1.5;
   /* 1 */
   -webkit-text-size-adjust: 100%;
@@ -70,14 +66,8 @@ html,
   /* 3 */
   tab-size: 4;
   /* 3 */
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   /* 4 */
-  font-feature-settings: normal;
-  /* 5 */
-  font-variation-settings: normal;
-  /* 6 */
-  -webkit-tap-highlight-color: transparent;
-  /* 7 */
 }
 
 /*
@@ -112,8 +102,7 @@ Add the correct text decoration in Chrome, Edge, and Safari.
 */
 
 abbr:where([title]) {
-  -webkit-text-decoration: underline dotted;
-          text-decoration: underline dotted;
+  text-decoration: underline dotted;
 }
 
 /*
@@ -149,10 +138,8 @@ strong {
 }
 
 /*
-1. Use the user's configured `mono` font-family by default.
-2. Use the user's configured `mono` font-feature-settings by default.
-3. Use the user's configured `mono` font-variation-settings by default.
-4. Correct the odd `em` font sizing in all browsers.
+1. Use the user's configured `mono` font family by default.
+2. Correct the odd `em` font sizing in all browsers.
 */
 
 code,
@@ -161,12 +148,8 @@ samp,
 pre {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   /* 1 */
-  font-feature-settings: normal;
-  /* 2 */
-  font-variation-settings: normal;
-  /* 3 */
   font-size: 1em;
-  /* 4 */
+  /* 2 */
 }
 
 /*
@@ -225,17 +208,11 @@ select,
 textarea {
   font-family: inherit;
   /* 1 */
-  font-feature-settings: inherit;
-  /* 1 */
-  font-variation-settings: inherit;
-  /* 1 */
   font-size: 100%;
   /* 1 */
   font-weight: inherit;
   /* 1 */
   line-height: inherit;
-  /* 1 */
-  letter-spacing: inherit;
   /* 1 */
   color: inherit;
   /* 1 */
@@ -260,9 +237,9 @@ select {
 */
 
 button,
-input:where([type='button']),
-input:where([type='reset']),
-input:where([type='submit']) {
+[type='button'],
+[type='reset'],
+[type='submit'] {
   -webkit-appearance: button;
   /* 1 */
   background-color: transparent;
@@ -382,14 +359,6 @@ menu {
 }
 
 /*
-Reset default styling for dialogs.
-*/
-
-dialog {
-  padding: 0;
-}
-
-/*
 Prevent resizing textareas horizontally by default.
 */
 
@@ -457,12 +426,6 @@ video {
   height: auto;
 }
 
-/* Make elements with the HTML hidden attribute stay hidden by default */
-
-[hidden] {
-  display: none;
-}
-
 body {
   background: var(--background);
   color: var(--neutral-gray-100);
@@ -515,9 +478,6 @@ label {
   --tw-pan-y:  ;
   --tw-pinch-zoom:  ;
   --tw-scroll-snap-strictness: proximity;
-  --tw-gradient-from-position:  ;
-  --tw-gradient-via-position:  ;
-  --tw-gradient-to-position:  ;
   --tw-ordinal:  ;
   --tw-slashed-zero:  ;
   --tw-numeric-figure:  ;
@@ -549,10 +509,6 @@ label {
   --tw-backdrop-opacity:  ;
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
-  --tw-contain-size:  ;
-  --tw-contain-layout:  ;
-  --tw-contain-paint:  ;
-  --tw-contain-style:  ;
 }
 
 ::backdrop {
@@ -569,9 +525,6 @@ label {
   --tw-pan-y:  ;
   --tw-pinch-zoom:  ;
   --tw-scroll-snap-strictness: proximity;
-  --tw-gradient-from-position:  ;
-  --tw-gradient-via-position:  ;
-  --tw-gradient-to-position:  ;
   --tw-ordinal:  ;
   --tw-slashed-zero:  ;
   --tw-numeric-figure:  ;
@@ -603,440 +556,436 @@ label {
   --tw-backdrop-opacity:  ;
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
-  --tw-contain-size:  ;
-  --tw-contain-layout:  ;
-  --tw-contain-paint:  ;
-  --tw-contain-style:  ;
 }
 
-#root :is(.tw-fixed) {
+#root .tw-fixed {
   position: fixed;
 }
 
-#root :is(.tw-absolute) {
+#root .tw-absolute {
   position: absolute;
 }
 
-#root :is(.tw-relative) {
+#root .tw-relative {
   position: relative;
 }
 
-#root :is(.tw-sticky) {
+#root .tw-sticky {
   position: sticky;
 }
 
-#root :is(.tw--top-px) {
-  top: -1px;
-}
-
-#root :is(.tw-bottom-0) {
+#root .tw-bottom-0 {
   bottom: 0px;
 }
 
-#root :is(.tw-bottom-full) {
-  bottom: 100%;
-}
-
-#root :is(.tw-top-16) {
+#root .tw-top-16 {
   top: 4rem;
 }
 
-#root :is(.tw-top-full) {
+#root .tw-bottom-full {
+  bottom: 100%;
+}
+
+#root .tw-top-full {
   top: 100%;
 }
 
-#root :is(.tw-top-px) {
+#root .tw-top-px {
   top: 1px;
 }
 
-#root :is(.tw-z-50) {
+#root .tw--top-px {
+  top: -1px;
+}
+
+#root .tw-z-50 {
   z-index: 50;
 }
 
-#root :is(.tw-mx-auto) {
+#root .tw-mx-auto {
   margin-left: auto;
   margin-right: auto;
 }
 
-#root :is(.tw-mb-0) {
-  margin-bottom: 0px;
-}
-
-#root :is(.tw-mb-0\.5) {
-  margin-bottom: 0.125rem;
-}
-
-#root :is(.tw-mb-2) {
-  margin-bottom: 0.5rem;
-}
-
-#root :is(.tw-mb-4) {
-  margin-bottom: 1rem;
-}
-
-#root :is(.tw-mb-5) {
-  margin-bottom: 1.25rem;
-}
-
-#root :is(.tw-mb-8) {
-  margin-bottom: 2rem;
-}
-
-#root :is(.tw-ml-4) {
-  margin-left: 1rem;
-}
-
-#root :is(.tw-mt-10) {
-  margin-top: 2.5rem;
-}
-
-#root :is(.tw-mt-12) {
+#root .tw-mt-12 {
   margin-top: 3rem;
 }
 
-#root :is(.tw-mt-2) {
-  margin-top: 0.5rem;
+#root .tw-mb-8 {
+  margin-bottom: 2rem;
 }
 
-#root :is(.tw-mt-4) {
-  margin-top: 1rem;
-}
-
-#root :is(.tw-mt-6) {
+#root .tw-mt-6 {
   margin-top: 1.5rem;
 }
 
-#root :is(.tw-mt-8) {
+#root .tw-mt-8 {
   margin-top: 2rem;
 }
 
-#root :is(.tw-inline-block) {
+#root .tw-mb-0\.5 {
+  margin-bottom: 0.125rem;
+}
+
+#root .tw-mb-0 {
+  margin-bottom: 0px;
+}
+
+#root .tw-mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+#root .tw-mt-2 {
+  margin-top: 0.5rem;
+}
+
+#root .tw-mb-4 {
+  margin-bottom: 1rem;
+}
+
+#root .tw-mt-4 {
+  margin-top: 1rem;
+}
+
+#root .tw-mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+#root .tw-mt-10 {
+  margin-top: 2.5rem;
+}
+
+#root .tw-ml-4 {
+  margin-left: 1rem;
+}
+
+#root .tw-inline-block {
   display: inline-block;
 }
 
-#root :is(.tw-flex) {
+#root .tw-flex {
   display: flex;
 }
 
-#root :is(.tw-inline-flex) {
+#root .tw-inline-flex {
   display: inline-flex;
 }
 
-#root :is(.tw-hidden) {
+#root .tw-hidden {
   display: none;
 }
 
-#root :is(.tw-h-12) {
-  height: 3rem;
-}
-
-#root :is(.tw-h-14) {
-  height: 3.5rem;
-}
-
-#root :is(.tw-h-16) {
-  height: 4rem;
-}
-
-#root :is(.tw-h-full) {
+#root .tw-h-full {
   height: 100%;
 }
 
-#root :is(.tw-w-64) {
-  width: 16rem;
+#root .tw-h-16 {
+  height: 4rem;
 }
 
-#root :is(.tw-w-80) {
-  width: 20rem;
+#root .tw-h-12 {
+  height: 3rem;
 }
 
-#root :is(.tw-w-full) {
+#root .tw-h-14 {
+  height: 3.5rem;
+}
+
+#root .tw-w-full {
   width: 100%;
 }
 
-#root :is(.tw-max-w-2xl) {
+#root .tw-w-64 {
+  width: 16rem;
+}
+
+#root .tw-w-80 {
+  width: 20rem;
+}
+
+#root .tw-max-w-2xl {
   max-width: 42rem;
 }
 
-#root :is(.tw-max-w-3xl) {
-  max-width: 48rem;
-}
-
-#root :is(.tw-max-w-5xl) {
+#root .tw-max-w-5xl {
   max-width: 64rem;
 }
 
-#root :is(.tw-flex-1) {
+#root .tw-max-w-3xl {
+  max-width: 48rem;
+}
+
+#root .tw-flex-1 {
   flex: 1 1 0%;
 }
 
-#root :is(.tw-rotate-180) {
+#root .tw-rotate-180 {
   --tw-rotate: 180deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-#root :is(.tw-cursor-not-allowed) {
+#root .tw-cursor-not-allowed {
   cursor: not-allowed;
 }
 
-#root :is(.tw-cursor-pointer) {
+#root .tw-cursor-pointer {
   cursor: pointer;
 }
 
-#root :is(.tw-flex-col) {
+#root .tw-flex-col {
   flex-direction: column;
 }
 
-#root :is(.tw-flex-col-reverse) {
+#root .tw-flex-col-reverse {
   flex-direction: column-reverse;
 }
 
-#root :is(.tw-flex-wrap) {
+#root .tw-flex-wrap {
   flex-wrap: wrap;
 }
 
-#root :is(.tw-items-start) {
+#root .tw-items-start {
   align-items: flex-start;
 }
 
-#root :is(.tw-items-end) {
+#root .tw-items-end {
   align-items: flex-end;
 }
 
-#root :is(.tw-items-center) {
+#root .tw-items-center {
   align-items: center;
 }
 
-#root :is(.tw-justify-end) {
+#root .tw-justify-end {
   justify-content: flex-end;
 }
 
-#root :is(.tw-justify-center) {
+#root .tw-justify-center {
   justify-content: center;
 }
 
-#root :is(.tw-justify-between) {
+#root .tw-justify-between {
   justify-content: space-between;
 }
 
-#root :is(.tw-justify-evenly) {
+#root .tw-justify-evenly {
   justify-content: space-evenly;
 }
 
-#root :is(.tw-gap-2) {
-  gap: 0.5rem;
-}
-
-#root :is(.tw-gap-4) {
+#root .tw-gap-4 {
   gap: 1rem;
 }
 
-#root :is(.tw-gap-x-16) {
-  column-gap: 4rem;
+#root .tw-gap-2 {
+  gap: 0.5rem;
 }
 
-#root :is(.tw-gap-x-2) {
-  column-gap: 0.5rem;
-}
-
-#root :is(.tw-gap-x-4) {
-  column-gap: 1rem;
-}
-
-#root :is(.tw-gap-y-12) {
-  row-gap: 3rem;
-}
-
-#root :is(.tw-gap-y-2) {
-  row-gap: 0.5rem;
-}
-
-#root :is(.tw-gap-y-4) {
+#root .tw-gap-y-4 {
   row-gap: 1rem;
 }
 
-#root :is(.tw-gap-y-6) {
+#root .tw-gap-x-2 {
+  column-gap: 0.5rem;
+}
+
+#root .tw-gap-y-6 {
   row-gap: 1.5rem;
 }
 
-#root :is(.tw-gap-y-8) {
+#root .tw-gap-y-2 {
+  row-gap: 0.5rem;
+}
+
+#root .tw-gap-y-8 {
   row-gap: 2rem;
 }
 
-#root :is(.tw-overflow-auto) {
+#root .tw-gap-x-4 {
+  column-gap: 1rem;
+}
+
+#root .tw-gap-y-12 {
+  row-gap: 3rem;
+}
+
+#root .tw-gap-x-16 {
+  column-gap: 4rem;
+}
+
+#root .tw-overflow-auto {
   overflow: auto;
 }
 
-#root :is(.tw-rounded) {
-  border-radius: 0.25rem;
-}
-
-#root :is(.tw-rounded-lg) {
+#root .tw-rounded-lg {
   border-radius: 0.5rem;
 }
 
-#root :is(.tw-rounded-xl) {
+#root .tw-rounded-xl {
   border-radius: 0.75rem;
 }
 
-#root :is(.tw-border-2) {
+#root .tw-rounded {
+  border-radius: 0.25rem;
+}
+
+#root .tw-border-2 {
   border-width: 2px;
 }
 
-#root :is(.tw-border-b) {
-  border-bottom-width: 1px;
-}
-
-#root :is(.tw-border-r) {
-  border-right-width: 1px;
-}
-
-#root :is(.tw-border-t) {
+#root .tw-border-t {
   border-top-width: 1px;
 }
 
-#root :is(.tw-border-neutral-blue-100) {
+#root .tw-border-b {
+  border-bottom-width: 1px;
+}
+
+#root .tw-border-r {
+  border-right-width: 1px;
+}
+
+#root .tw-border-neutral-blue-100 {
   border-color: var(--neutral-blue-100);
 }
 
-#root :is(.tw-border-neutral-gray-300) {
+#root .tw-border-neutral-gray-300 {
   border-color: var(--neutral-gray-300);
 }
 
-#root :is(.tw-bg-background) {
+#root .tw-bg-background {
   background-color: var(--background);
 }
 
-#root :is(.tw-bg-error) {
-  background-color: var(--error);
-}
-
-#root :is(.tw-bg-primary) {
+#root .tw-bg-primary {
   background-color: var(--primary);
 }
 
-#root :is(.tw-bg-success) {
+#root .tw-bg-success {
   background-color: var(--success);
 }
 
-#root :is(.tw-fill-neutral-gray-500) {
+#root .tw-bg-error {
+  background-color: var(--error);
+}
+
+#root .tw-fill-neutral-gray-500 {
   fill: var(--neutral-gray-500);
 }
 
-#root :is(.tw-p-0) {
-  padding: 0px;
-}
-
-#root :is(.tw-p-10) {
+#root .tw-p-10 {
   padding: 2.5rem;
 }
 
-#root :is(.tw-p-2) {
+#root .tw-p-0 {
+  padding: 0px;
+}
+
+#root .tw-p-2 {
   padding: 0.5rem;
 }
 
-#root :is(.tw-p-4) {
+#root .tw-p-4 {
   padding: 1rem;
 }
 
-#root :is(.tw-px-0) {
-  padding-left: 0px;
-  padding-right: 0px;
-}
-
-#root :is(.tw-px-10) {
+#root .tw-px-10 {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
 }
 
-#root :is(.tw-px-4) {
-  padding-left: 1rem;
-  padding-right: 1rem;
+#root .tw-px-0 {
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
-#root :is(.tw-py-2) {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-
-#root :is(.tw-py-5) {
+#root .tw-py-5 {
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
 }
 
-#root :is(.tw-pl-8) {
-  padding-left: 2rem;
+#root .tw-px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
-#root :is(.tw-pt-4) {
+#root .tw-py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#root .tw-pt-4 {
   padding-top: 1rem;
 }
 
-#root :is(.tw-text-left) {
+#root .tw-pl-8 {
+  padding-left: 2rem;
+}
+
+#root .tw-text-left {
   text-align: left;
 }
 
-#root :is(.tw-text-center) {
+#root .tw-text-center {
   text-align: center;
 }
 
-#root :is(.tw-text-sm) {
+#root .tw-text-sm {
   font-size: var(--sm);
 }
 
-#root :is(.tw-text-xl) {
+#root .tw-text-xl {
   font-size: var(--xl);
 }
 
-#root :is(.tw-font-bold) {
+#root .tw-font-bold {
   font-weight: 700;
 }
 
-#root :is(.\!tw-text-neutral-gray-100) {
-  color: var(--neutral-gray-100) !important;
-}
-
-#root :is(.\!tw-text-primary) {
-  color: var(--primary) !important;
-}
-
-#root :is(.tw-text-error) {
-  color: var(--error);
-}
-
-#root :is(.tw-text-neutral-gray-100) {
+#root .tw-text-neutral-gray-100 {
   color: var(--neutral-gray-100);
 }
 
-#root :is(.tw-text-neutral-gray-300) {
+#root .tw-text-error {
+  color: var(--error);
+}
+
+#root .tw-text-neutral-gray-300 {
   color: var(--neutral-gray-300);
 }
 
-#root :is(.tw-text-primary) {
+#root .\!tw-text-neutral-gray-100 {
+  color: var(--neutral-gray-100) !important;
+}
+
+#root .tw-text-primary {
   color: var(--primary);
 }
 
-#root :is(.tw-text-white) {
+#root .\!tw-text-primary {
+  color: var(--primary) !important;
+}
+
+#root .tw-text-white {
   color: var(--white);
 }
 
-#root :is(.tw-underline) {
+#root .tw-underline {
   text-decoration-line: underline;
 }
 
-#root :is(.tw-shadow-none) {
+#root .tw-shadow-none {
   --tw-shadow: 0 0 #0000;
   --tw-shadow-colored: 0 0 #0000;
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-#root :is(.tw-backdrop-blur) {
+#root .tw-backdrop-blur {
   --tw-backdrop-blur: blur(8px);
   -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
           backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
 
-#root :is(.tw-transition) {
+#root .tw-transition {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
@@ -1044,60 +993,60 @@ label {
   transition-duration: 150ms;
 }
 
-#root :is(.tw-duration-150) {
+#root .tw-duration-150 {
   transition-duration: 150ms;
 }
 
-#root :is(.tw-ease-out) {
+#root .tw-ease-out {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
-#root :is(.hover\:tw-bg-neutral-gray-500:hover) {
+#root .hover\:tw-bg-neutral-gray-500:hover {
   background-color: var(--neutral-gray-500);
 }
 
-#root :is(.hover\:tw-text-primary:hover) {
+#root .hover\:tw-text-primary:hover {
   color: var(--primary);
 }
 
 @media print {
-  #root :is(.print\:\!tw-mt-0) {
+  #root .print\:\!tw-mt-0 {
     margin-top: 0px !important;
   }
 
-  #root :is(.print\:tw-mb-0) {
+  #root .print\:tw-mb-0 {
     margin-bottom: 0px;
   }
 
-  #root :is(.print\:tw-block) {
+  #root .print\:tw-block {
     display: block;
   }
 
-  #root :is(.print\:tw-hidden) {
+  #root .print\:tw-hidden {
     display: none;
   }
 
-  #root :is(.print\:tw-h-screen) {
+  #root .print\:tw-h-screen {
     height: 100vh;
   }
 
-  #root :is(.print\:tw-w-screen) {
+  #root .print\:tw-w-screen {
     width: 100vw;
   }
 
-  #root :is(.print\:tw-border-2) {
+  #root .print\:tw-border-2 {
     border-width: 2px;
   }
 
-  #root :is(.print\:tw-border-none) {
+  #root .print\:tw-border-none {
     border-style: none;
   }
 
-  #root :is(.print\:\!tw-p-0) {
+  #root .print\:\!tw-p-0 {
     padding: 0px !important;
   }
 
-  #root :is(.print\:tw-p-48) {
+  #root .print\:tw-p-48 {
     padding: 12rem;
   }
 }

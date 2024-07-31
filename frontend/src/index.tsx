@@ -4,8 +4,6 @@ import App from './App';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import UserInfoProvider from './context/User';
 import AuthProvider from './context/Auth';
-import { BrowserRouter } from 'react-router-dom';
-
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -15,15 +13,14 @@ const darkTheme = createTheme({
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-
 root.render(
-    <BrowserRouter>
-      <AuthProvider>
-        <UserInfoProvider>
-          <ThemeProvider theme={darkTheme}>
-            <App />
-          </ThemeProvider>
-        </UserInfoProvider>
-      </AuthProvider>
-    </BrowserRouter>
+  <React.StrictMode>
+    <AuthProvider>
+      <UserInfoProvider>
+        <ThemeProvider theme={darkTheme}>
+          <App />
+        </ThemeProvider>
+      </UserInfoProvider>
+    </AuthProvider>
+  </React.StrictMode>
 );

@@ -16,6 +16,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+// implementa la clase que tiene como INPUT un JWT y como output un AbstractAuthenticationToken
+// lo que hace esta clase es tomar la informacion del JWT emitido por el IAM y va a sacar de ese JWT informacion
+// que nos sirve en spring para tener info necesario para tener autentticidad y autorizacion
+
 
 @Component
 public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
@@ -30,6 +34,8 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
 
 
     @Override
+    //Toma la informacion del JWT emitido por el IAM y saca del JWT cierta info que nos sirve como spring dentro de nuestra app
+    // en el contexto la info necesaria para tener acceso dentro de la app
     public AbstractAuthenticationToken convert(Jwt jwt) {
         System.out.println("JWT: " + jwt.getTokenValue());
         Collection<GrantedAuthority> authorities = Stream.concat(
@@ -51,7 +57,7 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
         return new JwtAuthenticationToken(jwt,authorities,getprincipalClaimName(jwt));
     }*/
 
-    // this is to get the prinicpal name of the user from the preferred username
+    //CON ESTE GET vamos a obtener el nombre del user, recordemos que lo definimos en properties con "preferred_username"
     private String getprincipalClaimName(Jwt jwt){
         String claimName = JwtClaimNames.SUB;
         if (properties.getPrincipalAttribute() != null){
@@ -60,6 +66,7 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
         return  jwt.getClaim(claimName);
     }
 
+    // Este metodo extrae los roles del JWT
     private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
         Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
         Map<String, Object> resource = null;
@@ -92,5 +99,15 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toSet());
     }*/
+
+
+
+
+
+
+
+
+
+
 
 }
