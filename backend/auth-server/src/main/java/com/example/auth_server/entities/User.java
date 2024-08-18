@@ -6,10 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import com.example.auth_server.dto.UserRegistrationDTO;
+import com.example.auth_server.DTOs.UserRegistrationDTO;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -22,11 +21,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name", nullable = false) // Mapea la columna 'first_name' en la base de datos
     @NotBlank
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name", nullable = false) // Mapea la columna 'last_name' en la base de datos
     @NotBlank
     private String lastName;
 
@@ -36,7 +35,6 @@ public class User {
 
     @Column(name = "email", nullable = false, unique = true)
     @NotBlank
-    @Email
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -55,5 +53,4 @@ public class User {
         this.password = encodedPassword;
         this.phone = userRegistrationDTO.getPhone();
     }
-
 }

@@ -1,4 +1,4 @@
-package com.example.auth_server.dto;
+package com.example.auth_server.DTOs;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

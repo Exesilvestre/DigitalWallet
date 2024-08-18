@@ -7,7 +7,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="accounts-server" />
         <module name="config-server" />
+        <module name="users-server" />
         <module name="eureka-server" />
         <module name="gateway" />
         <module name="auth-server" />
@@ -16,10 +18,12 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="accounts-server" options="-parameters" />
       <module name="auth-server" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="users-server" options="-parameters" />
     </option>
   </component>
 </project>

@@ -1,8 +1,9 @@
 package com.example.auth_server.controller;
 
 import com.example.auth_server.DTOs.TokenResponseDTO;
+import com.example.auth_server.DTOs.UserLoginDTO;
 import com.example.auth_server.DTOs.UserRegisteredDTO;
-import com.example.auth_server.dto.UserRegistrationDTO;
+import com.example.auth_server.DTOs.UserRegistrationDTO;
 import com.example.auth_server.entities.User;
 import com.example.auth_server.exceptions.BadRequestException;
 import com.example.auth_server.exceptions.ResourceNotFoundException;
@@ -27,28 +28,11 @@ public class UserController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<UserRegisteredDTO> registerUser(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO) {
-        // Verificar si el correo ya está registrado
-        userService.findByEmail(userRegistrationDTO.getEmail())
-                .ifPresent(user -> {
-                    throw new BadRequestException("Email already registered");
-                });
-
-        // Registrar el nuevo usuario
-        User registeredUser = userService.registerUser(userRegistrationDTO);
-
-        // Crear el DTO de respuesta
-        UserRegisteredDTO responseDTO = new UserRegisteredDTO(registeredUser);
-
-        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
-    }
-
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDTO> loginUser(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<TokenResponseDTO> loginUser(@RequestBody UserLoginDTO loginRequestDTO) {
         try {
             // Autenticar al usuario y generar el token
-            TokenResponseDTO tokenResponseDTO = userService.loginUser(email, password);
+            TokenResponseDTO tokenResponseDTO = userService.loginUser(loginRequestDTO);
 
             return new ResponseEntity<>(tokenResponseDTO, HttpStatus.OK);
         } catch (BadRequestException e) {

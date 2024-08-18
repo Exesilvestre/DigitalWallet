@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +22,7 @@ public class Account {
     private Long id;
 
     @Column(name = "user_id", nullable = false)
-    @NotBlank
+    @NotNull
     private Long userId;
 
     @Column(name = "balance", nullable = false)

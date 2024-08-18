@@ -1,11 +1,11 @@
 package com.example.auth_server.services;
 
 import com.example.auth_server.DTOs.TokenResponseDTO;
-import com.example.auth_server.dto.UserRegistrationDTO;
+import com.example.auth_server.DTOs.UserLoginDTO;
+import com.example.auth_server.DTOs.UserRegistrationDTO;
 import com.example.auth_server.entities.User;
 import com.example.auth_server.exceptions.BadRequestException;
 import com.example.auth_server.exceptions.ResourceNotFoundException;
-import com.example.auth_server.repositories.AccountRepository;
 import com.example.auth_server.repositories.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,45 +27,28 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
     }
-    public User registerUser(UserRegistrationDTO userRegistrationDTO) {
-        try {
-            // Verificar si el correo ya está registrado
-            if (userRepository.findByEmail(userRegistrationDTO.getEmail()).isPresent()) {
-                throw new BadRequestException("Email already registered");
-            }
-
-            // Crear el objeto User usando el constructor
-            User user = new User(userRegistrationDTO, passwordEncoder.encode(userRegistrationDTO.getPassword()));
-            User savedUser = userRepository.save(user);
-
-            // Crear la cuenta para el usuario
-            accountService.createAccount(savedUser);
-
-            return savedUser;
-        } catch (Exception e) {
-            throw new RuntimeException("Error registering user: " + e.getMessage());
-        }
-    }
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-    public TokenResponseDTO loginUser(String email, String password) {
+    public TokenResponseDTO loginUser(UserLoginDTO loginRequestDTO) {
         try {
-            User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+            String emailToFind = loginRequestDTO.getEmail();
+            User user = this.findByEmail(emailToFind)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + loginRequestDTO.getEmail()));
 
-            if (!passwordEncoder.matches(password, user.getPassword())) {
+            System.out.println(user);
+
+            if (!passwordEncoder.matches(loginRequestDTO.getPassword(), user.getPassword())) {
                 throw new BadRequestException("Incorrect password");
             }
 
-            // Generar el token
             String token = jwtTokenProvider.generateToken(user);
 
             return new TokenResponseDTO(token);
         } catch (BadRequestException | ResourceNotFoundException e) {
-            throw e; // Propagar excepciones específicas
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Error during login: " + e.getMessage());
         }
