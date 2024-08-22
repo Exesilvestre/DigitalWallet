@@ -4,21 +4,25 @@ import lombok.Data;
 
 @Data
 public class TokenResponseDTO {
-    private String token;
+    private String accessToken;
+    private String refreshToken;
     private String message;
 
-    public TokenResponseDTO(String token, String message) {
-        this.token = token;
-        this.message = message;
-    }
-
-    public TokenResponseDTO(String token) {
-        this.token = token;
+    public TokenResponseDTO(String accessToken, String refreshToken) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
         this.message = null; // Por defecto, el mensaje es null
     }
 
+    public TokenResponseDTO(String accessToken, String refreshToken, String message) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+        this.message = message;
+    }
+
     public TokenResponseDTO() {
-        this.token = null;
+        this.accessToken = null;
+        this.refreshToken = null;
         this.message = null;
     }
 }

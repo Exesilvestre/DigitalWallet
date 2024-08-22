@@ -8,24 +8,38 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtTokenProvider {
 
     @Value("${jwt.secret.key}")
-    private String secretKey; // La clave secreta utilizada para firmar el token
+    private String secretKey;
 
-    private final long validityInMilliseconds = 180000; // 3 minutos de validez
+    private final long accessValidityInMilliseconds = 180000; // 3 minutos
+    private final long refreshValidityInMilliseconds = 604800000; // 7 días
 
-    /**
-     * Genera un token JWT para el usuario especificado.
-     *
-     * @param user El usuario para el que se genera el token.
-     * @return El token JWT generado.
-     */
-    public String generateToken(User user) {
+    // Genera el access token
+    public String generateAccessToken(User user) {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds);
+        Date validity = new Date(now.getTime() + accessValidityInMilliseconds);
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("sub", user.getEmail());
+        claims.put("iat", now.getTime() / 1000); // Tiempo en segundos
+        claims.put("exp", validity.getTime() / 1000); // Tiempo en segundos
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+    }
+
+    // Genera el refresh token
+    public String generateRefreshToken(User user) {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + refreshValidityInMilliseconds);
 
         return Jwts.builder()
                 .setSubject(user.getEmail())
