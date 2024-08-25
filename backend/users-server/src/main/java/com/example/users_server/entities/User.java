@@ -1,5 +1,6 @@
 package com.example.users_server.entities;
 
+import com.example.users_server.DTOs.UserDTO;
 import com.example.users_server.DTOs.UserRegistrationDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -47,5 +48,23 @@ public class User {
         this.email = userRegistrationDTO.getEmail();
         this.password = encodedPassword;
         this.phone = userRegistrationDTO.getPhone();
+    }
+
+    public void update(UserDTO userUpdateDTO) {
+        if (userUpdateDTO.getFirstName() != null) {
+            this.firstName = userUpdateDTO.getFirstName();
+        }
+        if (userUpdateDTO.getLastName() != null) {
+            this.lastName = userUpdateDTO.getLastName();
+        }
+        if (userUpdateDTO.getDni() != null) {
+            this.dni = userUpdateDTO.getDni();
+        }
+        if (userUpdateDTO.getEmail() != null) {
+            this.email = userUpdateDTO.getEmail();
+        }
+        if (userUpdateDTO.getPhone() != null) {
+            this.phone = userUpdateDTO.getPhone();
+        }
     }
 }

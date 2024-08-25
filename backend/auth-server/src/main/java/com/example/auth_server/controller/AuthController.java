@@ -3,8 +3,8 @@ package com.example.auth_server.controller;
 import com.example.auth_server.DTOs.*;
 import com.example.auth_server.exceptions.BadRequestException;
 import com.example.auth_server.exceptions.ResourceNotFoundException;
-import com.example.auth_server.services.JwtTokenProvider;
 import com.example.auth_server.services.AuthService;
+import com.example.auth_server.services.JwtTokenProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +15,12 @@ public class AuthController {
 
     private final AuthService authService;
 
-    public AuthController(AuthService authService) {
+    private final JwtTokenProvider jwtTokenProvider;
+
+
+    public AuthController(AuthService authService, JwtTokenProvider jwtTokenProvider) {
         this.authService = authService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/login")
@@ -38,8 +42,13 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/auth/refresh")
-    public TokenResponseDTO refreshToken(@RequestBody TokenRequestDTO tokenRequest) {
-        return authService.refreshToken(tokenRequest.getRefreshToken());
+    @PostMapping("/logout")
+    public ResponseEntity<String> logoutUser(@RequestHeader("Authorization") String token) {
+        try {
+            authService.logoutUser(token);
+            return new ResponseEntity<>("Logout successful", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error during logout: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

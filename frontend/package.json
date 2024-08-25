@@ -32,8 +32,7 @@
     "lint": "eslint '**/*.{js,ts,tsx}' --max-warnings=0",
     "lint:fix": "npm run eslint -- --fix",
     "tailwind:build": "rimraf ./src/tailwind/styles.css && NODE_ENV=production tailwindcss -i ./src/tailwind/tailwind.css -o ./src/tailwind/styles.css",
-    "tailwind:dev": "rimraf ./src/tailwind/styles.css && tailwindcss --postcss -i ./src/tailwind/tailwind.css -s -o ./src/tailwind/styles.css",
-    "fake-api": "json-server -m ./node_modules/json-server-auth --routes routes.json --watch data/db.json --port 3500"
+    "tailwind:dev": "rimraf ./src/tailwind/styles.css && tailwindcss --postcss -i ./src/tailwind/tailwind.css -s -o ./src/tailwind/styles.css"
   },
   "eslintConfig": {
     "extends": [

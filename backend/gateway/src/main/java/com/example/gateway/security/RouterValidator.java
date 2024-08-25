@@ -12,7 +12,6 @@ public class RouterValidator {
     public static final List<String> openApiEndpoints = List.of(
             "/api/login",
             "/api/register",
-            "/auth/verifyIdToken",
             "/mobile/swagger-ui/index.html"
     );
 

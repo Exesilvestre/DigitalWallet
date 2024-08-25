@@ -27,7 +27,7 @@ import {
   SUCCESS_MESSAGES,
   BAD_REQUEST,
 } from '../../constants/';
-import { useAuth, useLocalStorage } from '../../hooks';
+import { useNavigate } from 'react-router-dom'; 
 
 interface RegisterState {
   name: string;
@@ -62,9 +62,7 @@ const Register = () => {
     criteriaMode: 'all',
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [token, setToken] = useLocalStorage('token');
-  const { setIsAuthenticated } = useAuth();
+  const navigate = useNavigate(); 
 
   const [values, setValues] = React.useState<RegisterState>({
     email: '',
@@ -121,11 +119,9 @@ const Register = () => {
     })
       .then((response) => {
         setIsSuccess(true);
-        setToken(response.accessToken);
         setMessage(SUCCESS_MESSAGES[SUCCESS_MESSAGES_KEYS.USER_REGISTER]);
         setTimeout(() => {
-          setIsSubmiting(false);
-          setIsAuthenticated(true);
+          navigate('/login');
         }, messageDuration);
       })
       .catch((error) => {

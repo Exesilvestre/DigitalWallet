@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React, { createContext, useState, SetStateAction } from 'react';
 import { useLocalStorage } from '../../hooks';
+import { logout as apiLogout } from '../../utils/api';
 
 export const AuthContext = createContext<{
   isAuthenticated: boolean;
@@ -16,7 +17,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useLocalStorage('token');
   const [isAuthenticated, setIsAuthenticated] = useState(!!token);
 
-  const logout = () => {
+  const logout = async () => {
+    if (token) {
+      try {
+        await apiLogout(token);
+      } catch (error) {
+        console.log('Error during logout:', error);
+      }
+    }
     setIsAuthenticated(false);
     setToken(null);
   };

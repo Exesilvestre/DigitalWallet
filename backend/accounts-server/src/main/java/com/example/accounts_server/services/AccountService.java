@@ -1,7 +1,9 @@
 package com.example.accounts_server.services;
 
+import com.example.accounts_server.DTOs.AccountDTO;
 import com.example.accounts_server.DTOs.UserDTO;
 import com.example.accounts_server.entities.Account;
+import com.example.accounts_server.exceptions.ResourceNotFoundException;
 import com.example.accounts_server.repositories.AccountRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,11 +22,26 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final Random random = new Random();
 
-    @Value("C:\\Users\\Usuario-\\Desktop\\exe\\ProyectoFinalDH\\backend\\auth-server\\src\\main\\java\\com\\example\\auth_server\\services\\wordsAlias.txt")
+    @Value("C:\\Users\\Usuario-\\Desktop\\exe\\ProyectoFinalDH\\backend\\accounts-server\\src\\main\\java\\com\\example\\accounts_server\\services\\wordsAlias.txt")
     private String wordsAliasPath;
 
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
+    }
+
+    public AccountDTO getAccountById(Long accountId) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found with id " + accountId));
+        return new AccountDTO(account);
+    }
+
+    public AccountDTO updateAccount(Long userId, AccountDTO accountDTO) {
+        Account account = accountRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found with id " + userId));
+
+        account.update(accountDTO);
+        Account updatedaccount = accountRepository.save(account);
+        return new AccountDTO(updatedaccount);
     }
 
     public Account createAccount(UserDTO userDTO) {
@@ -53,25 +70,20 @@ public class AccountService {
         }
 
         String alias = randomWords(words, 3).stream().collect(Collectors.joining("."));
-        System.out.println("Generated alias: " + alias);
         return alias;
     }
 
     private List<String> loadWordsFromFile() {
-        System.out.println("Loading words from file: " + wordsAliasPath);
         try {
             List<String> lines = Files.readAllLines(Paths.get(wordsAliasPath));
-            System.out.println("Loaded lines: " + lines);
             return lines;
         } catch (IOException e) {
-            System.err.println("Error loading words file: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Error loading words file", e);
         }
     }
 
     private List<String> randomWords(List<String> words, int count) {
-        // Ensure count does not exceed the number of available words
         if (count > words.size()) {
             throw new IllegalArgumentException("Count exceeds number of available words");
         }

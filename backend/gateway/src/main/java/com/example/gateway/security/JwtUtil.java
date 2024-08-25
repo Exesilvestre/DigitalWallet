@@ -4,7 +4,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -16,6 +18,9 @@ public class JwtUtil {
 
     @Value("${jwt.secret.key}")
     private String secret;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     private Key key;
 
@@ -37,6 +42,11 @@ public class JwtUtil {
     }
 
     public boolean isInvalid(String token) {
-        return this.isTokenExpired(token);
+        return this.isTokenExpired(token) || isTokenInRedis(token);
+    }
+
+    private boolean isTokenInRedis(String token) {
+        System.out.println(redisTemplate.hasKey(token));
+        return redisTemplate.hasKey(token);
     }
 }

@@ -15,14 +15,18 @@ public class UserRegisteredDTO {
     private String dni;
     private String email;
     private String phone;
+    private String cvu;
+    private String alias;
 
-    public UserRegisteredDTO(User user) {
+    public UserRegisteredDTO(User user, AccountCreatedDTO accountCreatedDTO) {
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.dni = user.getDni();
         this.email = user.getEmail();
         this.phone = user.getPhone();
+        this.cvu = accountCreatedDTO.getCvu();
+        this.alias = accountCreatedDTO.getAlias();
     }
 }
 

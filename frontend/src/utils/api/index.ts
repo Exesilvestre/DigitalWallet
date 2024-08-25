@@ -15,7 +15,7 @@ const myInit = (method = 'GET', token?: string) => {
 const myRequest = (endpoint: string, method: string, token?: string) =>
   new Request(endpoint, myInit(method, token));
 
-const baseUrl = 'http://localhost:3500';
+const baseUrl = 'http://localhost:8082';
 
 const rejectPromise = (response?: Response): Promise<Response> =>
   Promise.reject({
@@ -25,7 +25,7 @@ const rejectPromise = (response?: Response): Promise<Response> =>
   });
 
 export const login = (email: string, password: string) => {
-  return fetch(myRequest(`${baseUrl}/login`, 'POST'), {
+  return fetch(myRequest(`${baseUrl}/auth-server/api/login`, 'POST'), {
     body: JSON.stringify({ email, password }),
   })
     .then((response) => {
@@ -41,7 +41,7 @@ export const login = (email: string, password: string) => {
 };
 
 export const createAnUser = (user: User) => {
-  return fetch(myRequest(`${baseUrl}/register`, 'POST'), {
+  return fetch(myRequest(`${baseUrl}/users-server/api/register`, 'POST'), {
     body: JSON.stringify(user),
   })
     .then((response) => {
@@ -50,9 +50,19 @@ export const createAnUser = (user: User) => {
       }
       return rejectPromise(response);
     })
-    .then((data) => {
-      createAnAccount(data);
-      return data;
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
+};
+
+export const logout = (token: string) => {
+  return fetch(myRequest(`${baseUrl}/auth-server/api/logout`, 'POST', token))
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return rejectPromise(response);
     })
     .catch((err) => {
       console.log(err);
@@ -61,7 +71,7 @@ export const createAnUser = (user: User) => {
 };
 
 export const getUser = (id: string): Promise<User> => {
-  return fetch(myRequest(`${baseUrl}/users/${id}`, 'GET'))
+  return fetch(myRequest(`${baseUrl}/users-server/api/user/${id}`, 'GET'))
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
@@ -86,68 +96,6 @@ export const updateUser = (
       console.log(err);
       return rejectPromise(err);
     });
-};
-
-// TODO: remove this functionality once backend is ready
-const generateCvu = (): string => {
-  let cvu = '';
-  for (let i = 0; i < 22; i++) {
-    cvu += Math.floor(Math.random() * 10);
-  }
-  return cvu;
-};
-
-// TODO: remove this functionality once backend is ready
-const generateAlias = (): string => {
-  const words = [
-    'Cuenta',
-    'Personal',
-    'Banco',
-    'Argentina',
-    'Digital',
-    'Money',
-    'House',
-    'Bank',
-    'Account',
-    'Cartera',
-    'Wallet',
-    'Pago',
-    'Pay',
-    'Rapido',
-    'Seguro',
-  ];
-  const length = 3;
-  let alias = '';
-  for (let i = 0; i < length; i++) {
-    alias += words[Math.floor(Math.random() * words.length)];
-    if (i < length - 1) {
-      alias += '.';
-    }
-  }
-  return alias;
-};
-
-// TODO: remove this functionality once backend is ready
-export const createAnAccount = (data: any): Promise<Response> => {
-  const { user, accessToken } = data;
-
-  const alias = generateAlias();
-  const cvu = generateCvu();
-  const account = {
-    alias,
-    cvu,
-    balance: 0,
-    name: `${user.firstName} ${user.lastName}`,
-  };
-
-  return fetch(
-    myRequest(`${baseUrl}/users/${user.id}/accounts`, 'POST', accessToken),
-    {
-      body: JSON.stringify(account),
-    }
-  ).then((response) =>
-    response.ok ? response.json() : rejectPromise(response)
-  );
 };
 
 export const getAccount = (id: string, token: string): Promise<UserAccount> => {

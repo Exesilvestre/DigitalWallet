@@ -6,9 +6,11 @@ import com.example.auth_server.entities.User;
 import com.example.auth_server.exceptions.BadRequestException;
 import com.example.auth_server.exceptions.ResourceNotFoundException;
 import com.example.auth_server.repositories.UserRepository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Optional;
 
 @Service
@@ -17,12 +19,14 @@ public class AuthService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisTemplate<String, String> redisTemplate;
 
     public AuthService(UserRepository userRepository,
-                       BCryptPasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider) {
+                       BCryptPasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider, RedisTemplate<String, String> redisTemplate) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.redisTemplate = redisTemplate;
     }
 
     public Optional<User> findByEmail(String email) {
@@ -34,17 +38,14 @@ public class AuthService {
             User user = this.findByEmail(loginRequestDTO.getEmail())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + loginRequestDTO.getEmail()));
 
-            System.out.println(user);
 
             if (!passwordEncoder.matches(loginRequestDTO.getPassword(), user.getPassword())) {
                 throw new BadRequestException("Incorrect password");
             }
-            System.out.println("paso password");
 
             String accessToken = jwtTokenProvider.generateAccessToken(user);
-            String refreshToken = jwtTokenProvider.generateRefreshToken(user);
 
-            return new TokenResponseDTO(accessToken, refreshToken);
+            return new TokenResponseDTO(accessToken);
         } catch (BadRequestException | ResourceNotFoundException e) {
             throw e;
         } catch (Exception e) {
@@ -52,20 +53,15 @@ public class AuthService {
         }
     }
 
-    public TokenResponseDTO refreshToken(String refreshToken) {
-        if (jwtTokenProvider.validateToken(refreshToken)) {
-            String email = jwtTokenProvider.getClaims(refreshToken).getSubject();
-            User user = findByEmail(email)
-                    .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+    public void logoutUser(String token) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7); // Remover el prefijo "Bearer "
+        }
 
-            // Generar un nuevo access token
-            String newAccessToken = jwtTokenProvider.generateAccessToken(user);
-            // Opcionalmente, generar un nuevo refresh token
-            String newRefreshToken = jwtTokenProvider.generateRefreshToken(user);
-
-            return new TokenResponseDTO(newAccessToken, newRefreshToken);
-        } else {
-            throw new BadRequestException("Invalid refresh token");
+        if (!jwtTokenProvider.isTokenExpired(token)) {
+            long expirationInSeconds = jwtTokenProvider.getExpirationDuration(token);
+            redisTemplate.opsForValue().set(token, "invalidated", Duration.ofSeconds(expirationInSeconds));
         }
     }
+
 }

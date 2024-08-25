@@ -1,5 +1,6 @@
 package com.example.accounts_server.entities;
 
+import com.example.accounts_server.DTOs.AccountDTO;
 import com.example.accounts_server.DTOs.UserDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -44,4 +45,18 @@ public class Account {
         this.name = userDTO.getFirstName() + " " + userDTO.getLastName();
     }
 
+    public void update(AccountDTO accountDTO){
+        if (accountDTO.getName() != null) {
+            this.name = accountDTO.getName();
+        }
+        if (accountDTO.getBalance() != null) {
+            this.balance = accountDTO.getBalance();
+        }
+        if (accountDTO.getCvu() != null) {
+            this.cvu = accountDTO.getCvu();
+        }
+        if (accountDTO.getAlias() != null) {
+            this.alias = accountDTO.getAlias();
+        }
+    }
 }
