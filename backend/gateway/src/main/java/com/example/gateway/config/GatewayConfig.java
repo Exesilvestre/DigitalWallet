@@ -31,6 +31,7 @@ public class GatewayConfig {
                         .uri("http://localhost:8081"))
                 .route("auth-server-login", r -> r.path("/auth-server/api/login") // Ruta para login
                         .filters(f -> f
+                                .addRequestHeader("X-Secret-Token", SECRET_TOKEN)
                                 .rewritePath("/auth-server/(?<segment>.*)", "/${segment}"))
                         .uri("http://localhost:8081")) // URI del auth-server
                 // Ruta para el users-server

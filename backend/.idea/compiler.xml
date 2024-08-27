@@ -7,19 +7,23 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="accounts-server" />
         <module name="config-server" />
+        <module name="cards-server" />
+        <module name="auth-server" />
+        <module name="accounts-server" />
         <module name="users-server" />
         <module name="eureka-server" />
         <module name="gateway" />
-        <module name="auth-server" />
+        <module name="activities-server" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="accounts-server" options="-parameters" />
+      <module name="activities-server" options="-parameters" />
       <module name="auth-server" options="-parameters" />
+      <module name="cards-server" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
       <module name="gateway" options="-parameters" />

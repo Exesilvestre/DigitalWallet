@@ -18,7 +18,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(!!token);
 
   const logout = async () => {
+    console.log('Logout function called');
     if (token) {
+      console.log('token exists');
       try {
         await apiLogout(token);
       } catch (error) {

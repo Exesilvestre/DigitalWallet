@@ -147,7 +147,7 @@ export const getUserActivities = (
 ): Promise<Transaction[]> => {
   return fetch(
     myRequest(
-      `${baseUrl}/users/${userId}/activities${limit ? `?_limit=${limit}` : ''}`,
+      `${baseUrl}/accounts-server/api/account/${userId}/activities${limit ? `?_limit=${limit}` : ''}`,
       'GET',
       token
     )
@@ -192,7 +192,7 @@ export const getUserCards = (
   userId: string,
   token: string
 ): Promise<Card[]> => {
-  return fetch(myRequest(`${baseUrl}/users/${userId}/cards`, 'GET', token))
+  return fetch(myRequest(`${baseUrl}/accounts-server/api/accounts/${userId}/cards`, 'GET', token))
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -206,7 +206,7 @@ export const getUserCards = (
 };
 
 export const getUserCard = (userId: string, cardId: string): Promise<Card> => {
-  return fetch(myRequest(`${baseUrl}/users/${userId}/cards/${cardId}`, 'GET'))
+  return fetch(myRequest(`${baseUrl}/accounts-server/api/accounts/${userId}/cards/${cardId}`, 'GET'))
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -225,7 +225,7 @@ export const deleteUserCard = (
   token: string
 ): Promise<Response> => {
   return fetch(
-    myRequest(`${baseUrl}/users/${userId}/cards/${cardId}`, 'DELETE', token)
+    myRequest(`${baseUrl}/accounts-server/api/accounts/${userId}/cards/${cardId}`, 'DELETE', token)
   )
     .then((response) => {
       if (response.ok) {
@@ -244,7 +244,7 @@ export const createUserCard = (
   card: any,
   token: string
 ): Promise<Response> => {
-  return fetch(myRequest(`${baseUrl}/users/${userId}/cards`, 'POST', token), {
+  return fetch(myRequest(`${baseUrl}/accounts-server/api/accounts/${userId}/cards`, 'POST', token), {
     body: JSON.stringify(card),
   })
     .then((response) =>

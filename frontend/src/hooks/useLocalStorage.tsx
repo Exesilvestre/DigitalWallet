@@ -18,7 +18,7 @@ export function useLocalStorage(
     const prevKey = prevKeyRef.current;
 
     if (prevKey !== key) {
-      window.localStorage.remove(prevKey);
+      window.localStorage.removeItem(prevKey);
     }
     prevKeyRef.current = key;
     window.localStorage.setItem(key, serialize(value));
