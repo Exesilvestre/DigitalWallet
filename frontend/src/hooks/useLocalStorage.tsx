@@ -6,6 +6,7 @@ export function useLocalStorage(
 ) {
   const [value, setValue] = useState(() => {
     const valueInLocalStorage = window.localStorage.getItem(key);
+    console.log("value in localstorage: ", valueInLocalStorage)
     if (valueInLocalStorage) {
       return deserialize(valueInLocalStorage);
     }
@@ -15,6 +16,7 @@ export function useLocalStorage(
   const prevKeyRef = useRef(key);
 
   useEffect(() => {
+    console.log("key: ", key)
     const prevKey = prevKeyRef.current;
 
     if (prevKey !== key) {

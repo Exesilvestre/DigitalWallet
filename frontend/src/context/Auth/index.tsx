@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import React, { createContext, useState, SetStateAction } from 'react';
+import React, { createContext, useState, useEffect, SetStateAction } from 'react';
 import { useLocalStorage } from '../../hooks';
 import { logout as apiLogout } from '../../utils/api';
+import { parseJwt } from '../../utils';
 
 export const AuthContext = createContext<{
   isAuthenticated: boolean;
@@ -17,8 +18,20 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useLocalStorage('token');
   const [isAuthenticated, setIsAuthenticated] = useState(!!token);
 
+  useEffect(() => {
+    if (token) {
+      const info = parseJwt(token);
+      if (info && info.exp && info.exp * 1000 < Date.now()) {
+        // Token expirado
+        setToken(null);
+        setIsAuthenticated(false);
+        window.location.href = '/login'; // Redirige al login
+      }
+    }
+  }, [token, setToken]);
+
   const logout = async () => {
-    console.log('Logout function called');
+    console.log("token", token);
     if (token) {
       console.log('token exists');
       try {

@@ -43,6 +43,8 @@ const Dashboard = () => {
   const { logout } = useAuth();
 
   useEffect(() => {
+    console.log("test useffect", logout, token, user)
+    console.log("user && user.id", user, user?.id)
     if (user && user.id) {
       getUserActivities(user.id, token)
         .then((activities) => {
