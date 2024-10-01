@@ -16,3 +16,10 @@ export interface UserAccount {
   id: string;
   name: string;
 }
+
+export interface UserKnownAccount {
+  id: number;
+  alias: string;
+  userId: string;
+}
+

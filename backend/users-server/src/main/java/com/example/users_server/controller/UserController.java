@@ -48,6 +48,12 @@ public class UserController {
         }
     }
 
+    @GetMapping("/users/exists/{id}")
+    public Boolean userExists(@PathVariable Long id) {
+        System.out.println("llego");
+        return userService.userExists(id);
+    }
+
 
     @PatchMapping("/user/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserDTO userDTO) {

@@ -1,6 +1,5 @@
 package com.example.cards_server.controllers;
 
-
 import com.example.cards_server.DTOs.CardCreateDTO;
 import com.example.cards_server.DTOs.CardDTO;
 import com.example.cards_server.exceptions.CardAlreadyExistsException;
@@ -22,35 +21,34 @@ public class CardController {
         this.cardService = cardService;
     }
 
-    @GetMapping("/cards")
-    public ResponseEntity<List<CardDTO>> getCardsByUserId(@RequestParam("userId") Long userId) {
+    @GetMapping("/accounts/{userId}/cards/{cardId}")
+    public ResponseEntity<CardDTO> getCardById(@PathVariable Long userId, @PathVariable Long cardId) {
+        try {
+            CardDTO card = cardService.getCardById(userId, cardId);
+            return new ResponseEntity<>(card, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/accounts/{userId}/cards")
+    public ResponseEntity<List<CardDTO>> getCardsByUserId(@PathVariable Long userId) {
         try {
             List<CardDTO> cards = cardService.getCardsByUserId(userId);
+            if (cards.isEmpty()) {
+                return new ResponseEntity<>(cards, HttpStatus.OK);
+            }
             return new ResponseEntity<>(cards, HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/cards/{cardId}")
-    public ResponseEntity<CardDTO> getCardById(@PathVariable("cardId") Long cardId) {
+    @PostMapping("/accounts/{userId}/cards")
+    public ResponseEntity<CardDTO> createCardForUser(@PathVariable Long userId, @RequestBody CardCreateDTO cardCreateDTO) {
         try {
-            CardDTO card = cardService.getCardById(cardId);
-            return new ResponseEntity<>(card, HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PostMapping("/cards")
-    public ResponseEntity<CardDTO> createCard(@RequestBody CardCreateDTO cardCreateDTO) {
-        try {
-            CardDTO cardDTO = cardService.createCard(cardCreateDTO);
-            return new ResponseEntity<>(cardDTO, HttpStatus.CREATED);
+            CardDTO createdCard = cardService.createCardForUser(userId, cardCreateDTO);
+            return new ResponseEntity<>(createdCard, HttpStatus.CREATED);
         } catch (CardAlreadyExistsException e) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         } catch (Exception e) {
@@ -58,15 +56,29 @@ public class CardController {
         }
     }
 
-    @DeleteMapping("/cards/{cardId}")
-    public ResponseEntity<Void> deleteCard(@PathVariable Long cardId) {
+    @DeleteMapping("/accounts/{userId}/cards/{cardId}")
+    public ResponseEntity<Void> deleteCard(@PathVariable Long userId, @PathVariable Long cardId) {
         try {
-            cardService.deleteCard(cardId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            cardService.deleteCardForUser(userId, cardId);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/accounts/{userId}/cards/by-number/{cardNumber}")
+    public ResponseEntity<CardDTO> getCardByLastFourNumbers(
+            @PathVariable Long userId,
+            @PathVariable String cardNumber) {
+        try {
+            CardDTO card = cardService.getCardByNumber(userId, cardNumber);
+            return new ResponseEntity<>(card, HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

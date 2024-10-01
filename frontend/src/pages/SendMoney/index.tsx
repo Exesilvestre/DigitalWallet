@@ -14,7 +14,7 @@ import {
   handleChange,
   moneyValidationConfig,
   formatCurrency,
-  getUserActivities,
+  getUserRecentActivities,
   parseRecordContent,
   calculateTransacionType,
   getAccounts,
@@ -42,7 +42,7 @@ const SendMoney = () => {
 
   useEffect(() => {
     if (user && user.id && !step) {
-      getUserActivities(user.id, token)
+      getUserRecentActivities(user.id, token)
         .then((activities) => {
           if ((activities as Transaction[]).length > 0) {
             const parsedActivities = activities.filter(
@@ -70,7 +70,7 @@ const SendMoney = () => {
         )
         .map((activity: Transaction) =>
           parseRecordContent(
-            { name: activity.name, origin: activity.origin },
+            { detail: activity.detail, origin: activity.origin },
             RecordVariant.ACCOUNT
           )
         );
@@ -158,10 +158,10 @@ function SendMoneyForm() {
   useEffect(() => {
     if (destination) {
       // TODO: implement a service to get user account by alias or cvu
-      getAccounts().then((accounts) => {
+      getAccounts(token).then((accounts) => {
         const userAccount = accounts.find(
           (account) =>
-            account.cvu === destination || account.alias === destination
+            account.alias === destination
         );
         if (userAccount) {
           setUserDestinationAccount(userAccount);
@@ -184,7 +184,7 @@ function SendMoneyForm() {
 
   useEffect(() => {
     if (user && user.id) {
-      getAccounts().then((accounts) => {
+      getAccounts(token).then((accounts) => {
         const userAccount = accounts.find(
           (account) => account.userId === user.id
         );
@@ -250,7 +250,7 @@ function SendMoneyForm() {
             <FormSingle
               name="destination"
               title="Agregá una nueva cuenta"
-              label="CVU ó Alias"
+              label="Alias"
               type="text"
               actionLabel="Continuar"
               formState={formState}

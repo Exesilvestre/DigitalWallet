@@ -17,7 +17,7 @@ import {
   moneyValidationConfig,
   isValueEmpty,
   valuesHaveErrors,
-  createDepositActivity,
+  createDepositActivityByCard,
 } from '../../utils';
 import { useLocalStorage, useUserInfo } from '../../hooks';
 
@@ -62,7 +62,20 @@ const LoadMoney = () => {
   const onSubmit: SubmitHandler<any> = (data) => {
     if (user && user.id) {
       setIsSubmiting(true);
-      createDepositActivity(user.id, parseFloat(data.money), token)
+      const cardNumber = searchParams.get('card'); // Obtén el número de tarjeta de los parámetros de búsqueda
+  
+      // Verifica si el número de tarjeta es null
+      if (!cardNumber) {
+        setIsError(true);
+        setTimeout(() => {
+          setIsError(false);
+          setIsSubmiting(false);
+        }, duration);
+        return; // Detener la ejecución si no hay número de tarjeta
+      }
+  
+      // Llama a createDepositActivityByCard pasando el número de tarjeta
+      createDepositActivityByCard(user.id, parseFloat(data.money), token, cardNumber)
         .then(() => {
           setIsSubmiting(false);
           navigate(`${ROUTES.HOME}?${SUCCESS}`);

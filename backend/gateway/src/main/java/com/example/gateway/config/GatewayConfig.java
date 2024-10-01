@@ -29,22 +29,48 @@ public class GatewayConfig {
                                 .addRequestHeader("X-Secret-Token", SECRET_TOKEN)
                                 .rewritePath("/auth-server/(?<segment>.*)", "/${segment}"))
                         .uri("http://localhost:8081"))
-                .route("auth-server-login", r -> r.path("/auth-server/api/login") // Ruta para login
+                .route("auth-server-login", r -> r.path("/auth-server/api/login")
                         .filters(f -> f
                                 .addRequestHeader("X-Secret-Token", SECRET_TOKEN)
                                 .rewritePath("/auth-server/(?<segment>.*)", "/${segment}"))
-                        .uri("http://localhost:8081")) // URI del auth-server
+                        .uri("http://localhost:8081"))
                 // Ruta para el users-server
-                .route("users-server", r -> r.path("/users-server/api/**")
+                .route("users-server-register", r -> r.path("/users-server/api/register")
                         .filters(f -> f
                                 .rewritePath("/users-server/(?<segment>.*)", "/${segment}"))
                         .uri("http://localhost:8083"))
+                .route("users-server", r -> r.path("/users-server/api/user/{id}")
+                        .filters(f -> f
+                                .addRequestHeader("X-Secret-Token", SECRET_TOKEN)
+                                .rewritePath("/users-server/(?<segment>.*)", "/${segment}"))
+                        .uri("http://localhost:8083"))
+                .route("users-server", r -> r.path("/users-server/api/**")
+                        .filters(f -> f
+                                .filter(filter)
+                                .addRequestHeader("X-Secret-Token", SECRET_TOKEN)
+                                .rewritePath("/users-server/(?<segment>.*)", "/${segment}"))
+                        .uri("http://localhost:8083"))
+                // Ruta para el accounts-server
                 .route("accounts-server", r -> r.path("/accounts-server/api/**")
                         .filters(f -> f
-                                .filter(filter) // Aplica el filtro de autenticación
+                                .filter(filter)
                                 .addRequestHeader("X-Secret-Token", SECRET_TOKEN)
                                 .rewritePath("/accounts-server/(?<segment>.*)", "/${segment}"))
                         .uri("http://localhost:8085"))
+                // Ruta para el cards-server
+                .route("cards-server", r -> r.path("/cards-server/api/**")
+                        .filters(f -> f
+                                .filter(filter)
+                                .addRequestHeader("X-Secret-Token", SECRET_TOKEN)
+                                .rewritePath("/cards-server/(?<segment>.*)", "/${segment}"))
+                        .uri("http://localhost:8087"))
+                // Ruta para el activities-server
+                .route("activities-server", r -> r.path("/activities-server/api/**")
+                        .filters(f -> f
+                                .filter(filter)
+                                .addRequestHeader("X-Secret-Token", SECRET_TOKEN)
+                                .rewritePath("/activities-server/(?<segment>.*)", "/${segment}"))
+                        .uri("http://localhost:8086"))
                 .build();
     }
 
@@ -53,7 +79,7 @@ public class GatewayConfig {
         return (ServerWebExchange exchange, WebFilterChain chain) -> {
             if (CorsUtils.isCorsRequest(exchange.getRequest())) {
                 exchange.getResponse().getHeaders().add("Access-Control-Allow-Origin", "*");
-                exchange.getResponse().getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                exchange.getResponse().getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
                 exchange.getResponse().getHeaders().add("Access-Control-Allow-Headers", "Authorization, Content-Type");
                 if (exchange.getRequest().getMethod().name().equals("OPTIONS")) {
                     exchange.getResponse().setStatusCode(org.springframework.http.HttpStatus.OK);

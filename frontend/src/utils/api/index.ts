@@ -99,10 +99,10 @@ export const updateUser = (
 };
 
 export const getAccount = (id: string, token: string): Promise<UserAccount> => {
-  return fetch(myRequest(`${baseUrl}/users/${id}/accounts`, 'GET', token), {})
+  return fetch(myRequest(`${baseUrl}/accounts-server/api/accounts/${id}`, 'GET', token), {})
     .then((response) => {
       if (response.ok) {
-        return response.json().then((account) => account[0]);
+        return response.json();
       }
       return rejectPromise(response);
     })
@@ -112,8 +112,8 @@ export const getAccount = (id: string, token: string): Promise<UserAccount> => {
     });
 };
 
-export const getAccounts = (): Promise<UserAccount[]> => {
-  return fetch(myRequest(`${baseUrl}/accounts`, 'GET'))
+export const getAccounts = (token: string): Promise<UserAccount[]> => {
+  return fetch(myRequest(`${baseUrl}/accounts-server/api/accounts/getAll`, 'GET', token))
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
@@ -128,12 +128,36 @@ export const updateAccount = (
   data: any,
   token: string
 ): Promise<Response> => {
-  return fetch(myRequest(`${baseUrl}/users/${id}/accounts/1`, 'PATCH', token), {
+  return fetch(myRequest(`${baseUrl}/accounts-server/api/accounts/${id}`, 'PATCH', token), {
     body: JSON.stringify(data),
   })
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
+};
+
+export const getUserRecentActivities = (
+  userId: string,
+  token: string,
+  limit?: number
+): Promise<Transaction[]> => {
+  return fetch(
+    myRequest(
+      `${baseUrl}/activities-server/api/${userId}/transactions${limit ? `?_limit=${limit}` : ''}`,
+      'GET',
+      token
+    )
+  )
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return rejectPromise(response);
+    })
     .catch((err) => {
       console.log(err);
       return rejectPromise(err);
@@ -147,7 +171,7 @@ export const getUserActivities = (
 ): Promise<Transaction[]> => {
   return fetch(
     myRequest(
-      `${baseUrl}/accounts-server/api/account/${userId}/activities${limit ? `?_limit=${limit}` : ''}`,
+      `${baseUrl}/activities-server/api/${userId}/activty`,
       'GET',
       token
     )
@@ -171,7 +195,7 @@ export const getUserActivity = (
 ): Promise<Transaction> => {
   return fetch(
     myRequest(
-      `${baseUrl}/users/${userId}/activities/${activityId}`,
+      `${baseUrl}/activities-server/api/${userId}/activty/${activityId}`,
       'GET',
       token
     )
@@ -192,7 +216,7 @@ export const getUserCards = (
   userId: string,
   token: string
 ): Promise<Card[]> => {
-  return fetch(myRequest(`${baseUrl}/accounts-server/api/accounts/${userId}/cards`, 'GET', token))
+  return fetch(myRequest(`${baseUrl}/cards-server/api/accounts/${userId}/cards`, 'GET', token))
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -225,13 +249,14 @@ export const deleteUserCard = (
   token: string
 ): Promise<Response> => {
   return fetch(
-    myRequest(`${baseUrl}/accounts-server/api/accounts/${userId}/cards/${cardId}`, 'DELETE', token)
+    myRequest(`${baseUrl}/cards-server/api/accounts/${userId}/cards/${cardId}`, 'DELETE', token)
   )
     .then((response) => {
       if (response.ok) {
-        return response.json();
+        // No intentar convertir a JSON si no hay contenido
+        return Promise.resolve(response);
       }
-      return rejectPromise(response);
+      return rejectPromise(response); // Manejar el caso de error
     })
     .catch((err) => {
       console.log(err);
@@ -244,7 +269,7 @@ export const createUserCard = (
   card: any,
   token: string
 ): Promise<Response> => {
-  return fetch(myRequest(`${baseUrl}/accounts-server/api/accounts/${userId}/cards`, 'POST', token), {
+  return fetch(myRequest(`${baseUrl}/cards-server/api/accounts/${userId}/cards`, 'POST', token), {
     body: JSON.stringify(card),
   })
     .then((response) =>
@@ -256,71 +281,41 @@ export const createUserCard = (
     });
 };
 
-// TODO: edit when backend is ready
-export const createDepositActivity = (
+export const createDepositActivityByCard = (
   userId: string,
   amount: number,
-  token: string
+  token: string,
+  cardNumber: string,
 ) => {
   const maxAmount = 30000;
   if (amount > maxAmount) return rejectPromise();
 
   const activity = {
     amount,
-    type: 'Deposit',
-    description: 'Depósito con tarjeta',
-    dated: new Date(), // date must be genarated in backend
+    cardNumber,
   };
 
   return fetch(
-    myRequest(`${baseUrl}/users/${userId}/activities`, 'POST', token),
+    myRequest(`${baseUrl}/activities-server/api/accounts/${userId}/transferences`, 'POST', token),
     {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(activity),
     }
   )
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
-    .then((data) => {
-      depositMoney(data.amount, userId, token);
-    })
     .catch((err) => {
       console.log(err);
       return rejectPromise(err);
     });
 };
 
-// TODO: remove when backend is ready
-const depositMoney = (amount: number, userId: string, token: string) => {
-  return getAccount(userId, token)
-    .then((account) => {
-      const newBalance = account.balance + amount;
-      const accountId = account.id;
-      return {
-        newBalance,
-        accountId,
-      };
-    })
-    .then(({ newBalance, accountId }) => {
-      fetch(
-        myRequest(
-          `${baseUrl}/users/${userId}/accounts/${accountId}`,
-          'PATCH',
-          token
-        ),
-        {
-          body: JSON.stringify({ balance: newBalance }),
-        }
-      )
-        .then((response) =>
-          response.ok ? response.json() : rejectPromise(response)
-        )
-        .catch((err) => {
-          console.log(err);
-          return rejectPromise(err);
-        });
-    });
-};
+
 
 // TODO: edit when backend is ready
 export const createTransferActivity = (

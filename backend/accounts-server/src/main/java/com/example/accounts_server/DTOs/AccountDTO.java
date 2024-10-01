@@ -7,14 +7,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AccountDTO {
-    private Long userId;
+    private String id;
+    private String userId;
     private Double balance;
     private String cvu;
     private String alias;
     private String name;
 
     public AccountDTO(Account account){
-        this.userId = account.getUserId();
+        this.id = String.valueOf(account.getId());
+        this.userId = String.valueOf(account.getUserId());
         this.balance = account.getBalance();
         this.cvu = account.getCvu();
         this.alias = account.getAlias();

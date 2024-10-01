@@ -6,12 +6,12 @@ export const sortByDate = (
 ): Transaction[] => {
   if (mode === 'desc' && transactions.length > 0) {
     return transactions.sort((a, b) => {
-      return new Date(b.dated).getTime() - new Date(a.dated).getTime();
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
   }
   if (mode === 'asc' && transactions.length > 0) {
     return transactions.sort((a, b) => {
-      return new Date(a.dated).getTime() - new Date(b.dated).getTime();
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
     });
   }
 

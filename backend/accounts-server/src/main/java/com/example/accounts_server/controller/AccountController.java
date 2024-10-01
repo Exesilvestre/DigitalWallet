@@ -23,17 +23,15 @@ public class AccountController {
     @PostMapping("/create-account")
     public ResponseEntity<AccountCreatedDTO> createAccount(@Valid @RequestBody UserDTO userDTO) {
 
-        // Registrar el nuevo usuario
         Account accountCreated = accountService.createAccount(userDTO);
 
-        // Crear el DTO de respuesta
         AccountCreatedDTO responseDTO = new AccountCreatedDTO(accountCreated);
 
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
 
-    @GetMapping("/account/{userId}")
+    @GetMapping("/accounts/{userId}")
     public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long userId) {
         try {
             AccountDTO accountDTO = accountService.getAccountByUserId(userId);
@@ -46,10 +44,10 @@ public class AccountController {
     }
 
 
-    @PatchMapping("/account/{userId}")
-    public ResponseEntity<AccountDTO> updateAccount(@PathVariable Long userId, @Valid @RequestBody AccountDTO accountDTO) {
+    @PatchMapping("/accounts/{userId}")
+    public ResponseEntity<AccountDTO> updateAccount(@PathVariable Long userId, @Valid @RequestBody UpdateDTO updateDTO) {
         try {
-            AccountDTO accountupdatedDTO = accountService.updateAccountByUserId(userId, accountDTO);
+            AccountDTO accountupdatedDTO = accountService.updateAccountByUserId(userId, updateDTO);
             return new ResponseEntity<>(accountupdatedDTO, HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -58,11 +56,12 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/account/{userId}/transactions")
-    public ResponseEntity<List<ActivityDTO>> getLatestTransactions(@PathVariable Long userId) {
+    @PutMapping("/accounts/{userId}/balance")
+    public ResponseEntity<AccountDTO> updateAccountBalance(@PathVariable Long userId, @RequestBody Double amount) {
         try {
-            List<ActivityDTO> activities = accountService.getLatestTransactionsByUserId(userId);
-            return new ResponseEntity<>(activities, HttpStatus.OK);
+            System.out.println("Llegó al controlador");
+            Account updatedAccount = accountService.updateAccountBalance(userId, amount);
+            return new ResponseEntity<>(new AccountDTO(updatedAccount), HttpStatus.OK); // Devuelve el DTO de la cuenta actualizada
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
@@ -70,39 +69,16 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/accounts/{userId}/cards/{cardId}")
-    public ResponseEntity<CardDTO> getCardById(@PathVariable Long userId, @PathVariable Long cardId) {
+    @GetMapping("/accounts/getAll")
+    public ResponseEntity<List<AccountDTO>> getAllAccounts() {
         try {
-            CardDTO card = accountService.getCardById(userId, cardId);
-            return new ResponseEntity<>(card, HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            List<AccountDTO> accounts = accountService.getAllAccounts();
+            return new ResponseEntity<>(accounts, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PostMapping("/accounts/{userId}/cards")
-    public ResponseEntity<CardDTO> createCardForUser(@PathVariable Long userId, @RequestBody CardDTO cardDTO) {
-        ResponseEntity<CardDTO> response = accountService.createCardForUser(userId, cardDTO);
 
-        if (response.getStatusCode() == HttpStatus.CREATED) {
-            return new ResponseEntity<>(response.getBody(), HttpStatus.CREATED);
-        } else if (response.getStatusCode() == HttpStatus.CONFLICT) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-    }
 
-    @DeleteMapping("/accounts/{userId}/cards/{cardId}")
-    public ResponseEntity<Void> deleteCard(@PathVariable Long userId, @PathVariable Long cardId) {
-        try {
-            return accountService.deleteCardForUser(userId, cardId);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 }

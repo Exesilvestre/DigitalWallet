@@ -60,6 +60,8 @@ const Profile = () => {
     criteriaMode: 'all',
   });
 
+  console.log()
+
   const isEmpty = isValueEmpty(userAccount.alias);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
   const { setIsAuthenticated } = useAuth();
@@ -68,6 +70,7 @@ const Profile = () => {
     if (user && user.id) {
       getAccount(user.id, token)
         .then((account) => {
+          console.log(account)
           if (account && account.alias && account.cvu) {
             setUserAccount(account);
           }

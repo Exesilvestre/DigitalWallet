@@ -15,17 +15,13 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    @NotBlank
-    private String name;
-
     @Column(name = "amount", nullable = false)
     @NotNull
     private Double amount;
 
-    @Column(name = "dated", nullable = false)
+    @Column(name = "date", nullable = false)
     @NotBlank
-    private String dated;
+    private String date;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
@@ -38,7 +34,13 @@ public class Activity {
     @NotBlank
     private String destination;
 
+    @Column(name = "detail")
+    private String detail;
+
     @Column(name = "type", nullable = false)
     @NotBlank
     private String type;
+
+    @Column(name = "cardId")  // Nueva columna 'cardId' (opcional)
+    private Long cardId;
 }

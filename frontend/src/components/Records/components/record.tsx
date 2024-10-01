@@ -23,6 +23,7 @@ import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
 import { Transaction, Card, Account, ActivityType } from '../../../types';
 import { useAuth, useLocalStorage, useUserInfo } from '../../../hooks';
+import { Records } from '..';
 
 export enum RecordVariant {
   TRANSACTION = 'transaction',
@@ -78,7 +79,7 @@ export const Record = ({
   );
 };
 
-function TransactionItem({ amount, name, dated, id, type }: Transaction) {
+function TransactionItem({ amount, detail, date, id, type }: Transaction) {
   const calculatedType = calculateTransacionType(amount, type);
   return (
     <Link
@@ -94,12 +95,12 @@ function TransactionItem({ amount, name, dated, id, type }: Transaction) {
         )}
         <p>
           {RECORD_MESSAGES[calculatedType] && RECORD_MESSAGES[calculatedType]}{' '}
-          {name}
+          {detail}
         </p>
       </div>
       <div className="tw-flex tw-text-left tw-flex-col tw-items-end">
         <p>{formatCurrency(locales, currency, amount)}</p>
-        <p>{formatDateFromString(dated)}</p>
+        <p>{date}</p>
       </div>
     </Link>
   );
@@ -134,19 +135,22 @@ function CardItem({
         .then((response) => {
           if (response.status === UNAUTHORIZED) {
             logout();
-          }
-          if (setRecords) {
-            setRecords((prev) =>
-              prev.filter((record) => (record.content as Card).id !== cardId)
+          } else {
+            if (setRecords) {
+              setRecords((prev) =>
+                prev.filter((record) => (record.content as Card).id !== cardId)
+              );
+            }
+            navigate(
+              `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_DELETED}`
             );
           }
-          navigate(
-            `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_DELETED}`
-          );
         })
         .catch((error) => {
           if (error.status === UNAUTHORIZED) {
             logout();
+          } else {
+            console.log('Error eliminando la tarjeta:', error);
           }
         });
     }

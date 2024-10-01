@@ -80,7 +80,7 @@ const ActivityDetails = () => {
                     RECORD_MESSAGES[activityType]}{' '}
                 </p>
                 <p className="tw-text-xl tw-font-bold">
-                  {userActivity && userActivity.name && userActivity.name}
+                  {userActivity && userActivity.detail && userActivity.detail}
                 </p>
                 <p className="tw-text-xl tw-font-bold">
                   {userActivity &&
@@ -88,7 +88,7 @@ const ActivityDetails = () => {
                     userActivity.destination}
                 </p>
                 <i>
-                  {userActivity && formatDateFromString(userActivity.dated)}
+                  {userActivity && formatDateFromString(userActivity.date)}
                 </i>
               </div>
             </div>

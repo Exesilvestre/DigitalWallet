@@ -52,6 +52,11 @@ public class UserService {
         return new UserDTO(user);
     }
 
+    public boolean userExists(Long userId) {
+        return userRepository.existsById(userId);
+    }
+
+
     public UserDTO updateUser(Long userId, UserDTO userDTO) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));

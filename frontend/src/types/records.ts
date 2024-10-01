@@ -1,11 +1,11 @@
 export enum TransactionType {
   Transfer = 'Transfer',
-  Deposit = 'Deposit',
+  Deposit = 'LOAD MONEY FROM CARD',
 }
 export interface Transaction {
   amount: number;
-  name?: string;
-  dated: string;
+  detail?: string;
+  date: string;
   id: string;
   type: TransactionType;
   origin?: string;

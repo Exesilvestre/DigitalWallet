@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
+    private String id;
     private String firstName;
     private String lastName;
     private String dni;
@@ -17,6 +18,7 @@ public class UserDTO {
 
 
     public UserDTO(User user) {
+        this.id = user.getId().toString();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.dni = user.getDni();
