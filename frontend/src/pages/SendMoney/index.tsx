@@ -61,7 +61,9 @@ const SendMoney = () => {
   }, [logout, step, token, user]);
 
   useEffect(() => {
+    console.log(...userActivities)
     if (userActivities.length > 0) {
+      console.log("llego: "+ userActivities)
       const parsedRecords = userActivities
         .filter(
           (activity: Transaction) =>
@@ -74,6 +76,7 @@ const SendMoney = () => {
             RecordVariant.ACCOUNT
           )
         );
+      console.log(parsedRecords)
 
       const uniqueRecords = parsedRecords.filter(
         (record, index, self) =>
@@ -104,6 +107,7 @@ const SendMoney = () => {
             }
             actions={
               <Link
+                id="new-account"
                 to={`${ROUTES.SEND_MONEY}?${STEP}1`}
                 className="tw-w-full tw-flex tw-items-center tw-justify-between tw-p-4 hover:tw-bg-neutral-gray-500 tw-transition"
               >
@@ -161,8 +165,7 @@ function SendMoneyForm() {
       getAccounts(token).then((accounts) => {
         const userAccount = accounts.find(
           (account) =>
-            account.alias === destination
-        );
+            account.cvu === destination || account.alias === destination);
         if (userAccount) {
           setUserDestinationAccount(userAccount);
         } else {
@@ -250,7 +253,7 @@ function SendMoneyForm() {
             <FormSingle
               name="destination"
               title="Agregá una nueva cuenta"
-              label="Alias"
+              label="CVU ó Alias"
               type="text"
               actionLabel="Continuar"
               formState={formState}
@@ -326,6 +329,7 @@ function SendMoneyForm() {
               actions={
                 <div className="tw-flex tw-w-full tw-justify-end tw-mt-6">
                   <Button
+                    id="confirm-transfer"
                     type="submit"
                     className="tw-h-12 tw-w-64"
                     variant="outlined"

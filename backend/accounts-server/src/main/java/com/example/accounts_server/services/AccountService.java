@@ -70,5 +70,19 @@ public class AccountService {
                 .collect(Collectors.toList());
     }
 
+    public AccountDTO getAccountByCvuOrAlias(String cvu, String alias) {
+        Account account = null;
+
+        if (cvu != null) {
+            account = accountRepository.findByCvu(cvu)
+                    .orElseThrow(() -> new ResourceNotFoundException("Account not found for CVU: " + cvu));
+        } else if (alias != null) {
+            account = accountRepository.findByAlias(alias)
+                    .orElseThrow(() -> new ResourceNotFoundException("Account not found for alias: " + alias));
+        }
+
+        return new AccountDTO(account);
+    }
+
 
 }

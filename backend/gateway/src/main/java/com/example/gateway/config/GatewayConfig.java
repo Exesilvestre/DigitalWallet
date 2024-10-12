@@ -37,6 +37,7 @@ public class GatewayConfig {
                 // Ruta para el users-server
                 .route("users-server-register", r -> r.path("/users-server/api/register")
                         .filters(f -> f
+                                .addRequestHeader("X-Secret-Token", SECRET_TOKEN)
                                 .rewritePath("/users-server/(?<segment>.*)", "/${segment}"))
                         .uri("http://localhost:8083"))
                 .route("users-server", r -> r.path("/users-server/api/user/{id}")

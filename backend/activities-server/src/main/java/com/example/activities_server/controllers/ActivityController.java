@@ -3,6 +3,7 @@ package com.example.activities_server.controllers;
 import com.example.activities_server.DTOs.AccountSummaryDTO;
 import com.example.activities_server.DTOs.ActivityDTO;
 import com.example.activities_server.DTOs.LoadMoneyRequest;
+import com.example.activities_server.DTOs.TransferRequest;
 import com.example.activities_server.exceptions.ResourceNotFoundException;
 import com.example.activities_server.services.ActivityService;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class ActivityController {
         this.activityService = activityService;
     }
 
-    @GetMapping("/{userId}/transactions")
+    @GetMapping("/{userId}/transferences")
     public ResponseEntity<List<ActivityDTO>> getLatestActivitiesByUserId(@PathVariable Long userId) {
         try {
             List<ActivityDTO> activities = activityService.getLatestActivitiesByUserId(userId);
@@ -71,4 +72,19 @@ public class ActivityController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/accounts/{userId}/transfer")
+    public ResponseEntity<ActivityDTO> makeTransfer(@PathVariable Long userId, @RequestBody TransferRequest transferRequest) {
+        try {
+            ActivityDTO activity = activityService.makeTransfer(userId, transferRequest);
+            return new ResponseEntity<>(activity, HttpStatus.CREATED);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(null, HttpStatus.GONE);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

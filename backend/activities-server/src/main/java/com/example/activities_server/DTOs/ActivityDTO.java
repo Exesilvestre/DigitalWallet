@@ -19,11 +19,11 @@ public class ActivityDTO {
     public ActivityDTO(Activity activity) {
         this.id = activity.getId();
         this.amount = activity.getAmount();
-        this.date = activity.getDate();  // Cambiando 'dated' a 'date'
+        this.date = activity.getDate();
         this.origin = activity.getOrigin();
         this.destination = activity.getDestination();
         this.type = activity.getType();
-        this.detail = activity.getDetail();  // Agregando 'detail'
-        this.cardId = activity.getCardId();  // Agregando 'cardId'
+        this.detail = activity.getDetail();
+        this.cardId = activity.getCardId();
     }
 }

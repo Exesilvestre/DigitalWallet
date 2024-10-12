@@ -122,6 +122,7 @@ const LoadMoney = () => {
                   )}
                   <div className="tw-flex tw-w-full tw-justify-end tw-mt-6">
                     <Button
+                      id="confirm-button"
                       type="submit"
                       className={`tw-h-12 tw-w-64 ${
                         hasErrors || !isDirty || isEmpty || isSubmiting
@@ -181,6 +182,7 @@ const LoadMoney = () => {
         }
         actions={
           <Link
+            id="select-card-link" 
             to={`${ROUTES.CARDS}?${SELECT}`}
             className="tw-w-full tw-flex tw-items-center tw-justify-between tw-p-4 hover:tw-bg-neutral-gray-500 tw-transition"
           >

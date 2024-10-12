@@ -39,6 +39,6 @@ export const SUCCESS_MESSAGES: Record<SUCCESS_MESSAGES_KEYS, string> = {
 
 export const RECORD_MESSAGES: Record<ActivityType, string> = {
   [ActivityType.TRANSFER_IN]: 'Recibiste de',
-  [ActivityType.TRANSFER_OUT]: 'Enviaste a',
-  [ActivityType.DEPOSIT]: 'Ingresaste',
+  [ActivityType.TRANSFER_OUT]: '',
+  [ActivityType.DEPOSIT]: '',
 };

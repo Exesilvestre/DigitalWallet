@@ -41,6 +41,6 @@ public class Activity {
     @NotBlank
     private String type;
 
-    @Column(name = "cardId")  // Nueva columna 'cardId' (opcional)
+    @Column(name = "cardId") //opcional
     private Long cardId;
 }

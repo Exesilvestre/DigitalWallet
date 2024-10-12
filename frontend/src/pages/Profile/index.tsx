@@ -119,31 +119,29 @@ const Profile = () => {
           className="tw-max-w-5xl"
           content={
             <div className="tw-flex tw-gap-4 tw-flex-col tw-w-full">
-              <p className="tw-font-bold">
+              <p className="tw-font-bold" id="cvu-info">
                 Copia tu cvu o alias para ingresar o transferir dinero desde
                 otra cuenta
               </p>
               <div className="tw-flex tw-mb-4 tw-justify-between tw-items-center">
                 <div>
-                  <p className="tw-font-bold tw-text-primary">CVU</p>
-                  <p className="">{userAccount.cvu}</p>
+                  <p className="tw-font-bold tw-text-primary" id="cvu-label">CVU</p>
+                  <p id="user-cvu">{userAccount.cvu}</p>
                 </div>
                 <Tooltip
                   className="tw-cursor-pointer"
                   message="Copiado"
                   position={TooltipPosition.top}
                 >
-                  <button
-                    onClick={() => copyToClipboard(userAccount.cvu || '')}
-                  >
+                  <button onClick={() => copyToClipboard(userAccount.cvu || '')}>
                     <Icon type="copy" />
                   </button>
                 </Tooltip>
               </div>
               <div className="tw-flex tw-justify-between tw-items-center">
                 <div>
-                  <p className="tw-font-bold tw-text-primary">Alias</p>
-                  <p className="">{userAccount.alias}</p>
+                  <p className="tw-font-bold tw-text-primary" id="alias-label">Alias</p>
+                  <p id="user-alias">{userAccount.alias}</p>
                 </div>
                 <div className="tw-flex">
                   <Link to={`${ROUTES.PROFILE}?${EDIT}`}>
@@ -154,9 +152,7 @@ const Profile = () => {
                     message="Copiado"
                     position={TooltipPosition.top}
                   >
-                    <button
-                      onClick={() => copyToClipboard('estealias.no.existe')}
-                    >
+                    <button onClick={() => copyToClipboard('estealias.no.existe')}>
                       <Icon type="copy" />
                     </button>
                   </Tooltip>
@@ -170,8 +166,8 @@ const Profile = () => {
           className="tw-max-w-5xl"
           content={
             <div className="tw-flex tw-flex-col">
-              <p className="tw-font-bold tw-mb-4">Editar alias</p>
-
+              <p className="tw-font-bold tw-mb-4" id="edit-alias-label">Editar alias</p>
+  
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                   <FormControl variant="outlined">
@@ -227,6 +223,6 @@ const Profile = () => {
       )}
     </div>
   );
-};
+}
 
 export default Profile;

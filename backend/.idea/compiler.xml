@@ -12,6 +12,7 @@
         <module name="auth-server" />
         <module name="accounts-server" />
         <module name="users-server" />
+        <module name="ui-tests" />
         <module name="eureka-server" />
         <module name="gateway" />
         <module name="activities-server" />
@@ -27,6 +28,7 @@
       <module name="config-server" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="ui-tests" options="-parameters" />
       <module name="users-server" options="-parameters" />
     </option>
   </component>

@@ -1,0 +1,67 @@
+services:
+  config-server:
+    build:
+      context: ./config-server
+    ports:
+      - "8888:8888"
+
+  eureka-server:
+    build:
+      context: ./eureka-server
+    ports:
+      - "8761:8761"
+
+  auth-server:
+    build:
+      context: ./auth-server
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./data:/data  # Monta la carpeta data para acceder a la base de datos
+
+  accounts-server:
+    build:
+      context: ./accounts-server
+    ports:
+      - "8085:8085"
+    volumes:
+      - ./data:/data  # Monta la carpeta data para acceder a la base de datos
+
+  activities-server:
+    build:
+      context: ./activities-server
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./data:/data  # Monta la carpeta data para acceder a la base de datos
+
+  cards-server:
+    build:
+      context: ./cards-server
+    ports:
+      - "8087:8087"
+    volumes:
+      - ./data:/data  # Monta la carpeta data para acceder a la base de datos
+
+  users-server:
+    build:
+      context: ./users-server
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./data:/data  # Monta la carpeta data para acceder a la base de datos
+
+  gateway:
+    build:
+      context: ./gateway
+    ports:
+      - "8082:8082"
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+networks:
+  default:
+    driver: bridge

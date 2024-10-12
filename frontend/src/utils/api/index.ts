@@ -15,7 +15,7 @@ const myInit = (method = 'GET', token?: string) => {
 const myRequest = (endpoint: string, method: string, token?: string) =>
   new Request(endpoint, myInit(method, token));
 
-const baseUrl = 'http://localhost:8082';
+const baseUrl = 'http://gateway:8082';
 
 const rejectPromise = (response?: Response): Promise<Response> =>
   Promise.reject({
@@ -147,7 +147,7 @@ export const getUserRecentActivities = (
 ): Promise<Transaction[]> => {
   return fetch(
     myRequest(
-      `${baseUrl}/activities-server/api/${userId}/transactions${limit ? `?_limit=${limit}` : ''}`,
+      `${baseUrl}/activities-server/api/${userId}/transferences${limit ? `?_limit=${limit}` : ''}`,
       'GET',
       token
     )
@@ -317,7 +317,6 @@ export const createDepositActivityByCard = (
 
 
 
-// TODO: edit when backend is ready
 export const createTransferActivity = (
   userId: string,
   token: string,
@@ -327,7 +326,7 @@ export const createTransferActivity = (
   name?: string
 ) => {
   return fetch(
-    myRequest(`${baseUrl}/users/${userId}/activities`, 'POST', token),
+    myRequest(`${baseUrl}/activities-server/api/accounts/${userId}/transfer`, 'POST', token),
     {
       body: JSON.stringify({
         type: 'Transfer',
@@ -335,52 +334,14 @@ export const createTransferActivity = (
         origin,
         destination,
         name,
-        dated: new Date(), // date must be genarated in backend
       }),
     }
   )
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
-    .then((response) => {
-      discountMoney(response.amount, userId, token);
-      return response;
-    })
     .catch((err) => {
       console.log(err);
       return rejectPromise(err);
-    });
-};
-
-// TODO: remove when backend is ready
-const discountMoney = (amount: number, userId: string, token: string) => {
-  return getAccount(userId, token)
-    .then((account) => {
-      // amount is negavite
-      const newBalance = account.balance + amount;
-      const accountId = account.id;
-      return {
-        newBalance,
-        accountId,
-      };
-    })
-    .then(({ newBalance, accountId }) => {
-      fetch(
-        myRequest(
-          `${baseUrl}/users/${userId}/accounts/${accountId}`,
-          'PATCH',
-          token
-        ),
-        {
-          body: JSON.stringify({ balance: newBalance }),
-        }
-      )
-        .then((response) =>
-          response.ok ? response.json() : rejectPromise(response)
-        )
-        .catch((err) => {
-          console.log(err);
-          return rejectPromise(err);
-        });
     });
 };

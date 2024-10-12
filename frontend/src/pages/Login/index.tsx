@@ -111,11 +111,11 @@ const Login = () => {
       >
         <div>
           <FormControl variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">
+            <InputLabel htmlFor="outlined-adornment-email">
               Correo
             </InputLabel>
             <OutlinedInput
-              id="outlined-adornment-email"
+              id="login-email" // ID para el campo de correo
               type="text"
               value={values.email}
               {...register('email', emailValidationConfig)}
@@ -132,7 +132,7 @@ const Login = () => {
               Contraseña
             </InputLabel>
             <OutlinedInput
-              id="outlined-adornment-password"
+              id="login-password" // ID para el campo de contraseña
               type={values.showPassword ? 'text' : 'password'}
               value={values.password}
               {...register('password', passwordValidationConfig)}
@@ -180,6 +180,6 @@ const Login = () => {
       )}
     </div>
   );
-};
+}
 
 export default Login;

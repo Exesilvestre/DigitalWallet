@@ -106,6 +106,7 @@ const CardsComponent = () => {
               <Link
                 to={`${ROUTES.CARDS}?${ADD}`}
                 className="tw-w-full tw-flex tw-items-center tw-justify-between tw-p-4 hover:tw-bg-neutral-gray-500 tw-transition"
+                id="add-card-button"
               >
                 <div className="tw-flex tw-items-center tw-gap-x-4">
                   <Icon type="add" />
@@ -120,7 +121,7 @@ const CardsComponent = () => {
             content={
               <>
                 <div>
-                  <p className="tw-mb-4 tw-font-bold">Tus tarjetas</p>
+                  <p id="header-user-cards" className="tw-mb-4 tw-font-bold">Tus tarjetas</p>
                 </div>
                 {userCards.length > 0 && !isLoading && (
                   <Records

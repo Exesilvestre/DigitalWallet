@@ -43,8 +43,6 @@ const Dashboard = () => {
   const { logout } = useAuth();
 
   useEffect(() => {
-    console.log("test useffect", logout, token, user)
-    console.log("user && user.id", user, user?.id)
     if (user && user.id) {
       getUserRecentActivities(user.id, token)
         .then((activities) => {
@@ -94,7 +92,7 @@ const Dashboard = () => {
           <div className="tw-flex tw-justify-between tw-mb-8">
             <div>
               <p className="tw-mb-4 tw-font-bold">Dinero disponible</p>
-              <p className="tw-text-xl tw-font-bold">
+              <p id="available-balance" className="tw-text-xl tw-font-bold">
                 {formatCurrency(locales, currency, userAccount?.balance)}
               </p>
             </div>

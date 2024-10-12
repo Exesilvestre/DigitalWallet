@@ -79,6 +79,26 @@ public class AccountController {
         }
     }
 
+    @PostMapping("/accounts/search")
+    public ResponseEntity<AccountDTO> getAccountByCvuOrAlias(@RequestBody AccountSearchRequest request) {
+        try {
+            String cvu = request.getCvu();
+            String alias = request.getAlias();
+
+            // Asegurarse de que al menos uno de los campos esté presente
+            if (cvu == null && alias == null) {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+
+            // Llamar al servicio para obtener la cuenta usando el CVU o el alias
+            AccountDTO accountDTO = accountService.getAccountByCvuOrAlias(cvu, alias);
+            return new ResponseEntity<>(accountDTO, HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 }

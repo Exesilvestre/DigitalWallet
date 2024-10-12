@@ -161,7 +161,7 @@ function CardItem({
       <div className="tw-flex tw-items-center tw-gap-x-4">
         <Icon type={cardType} />
 
-        <p>
+        <p id={`card-last-four-${lastFourDigits}`}>
           {type} terminada en {lastFourDigits}
         </p>
       </div>
@@ -192,7 +192,7 @@ function AccountItem({ name, origin }: Account) {
     <>
       <div className="tw-flex tw-items-center tw-gap-x-4">
         <Icon type="user" />
-        <p>{name}</p>
+        <p>{origin}</p>
       </div>
       <div className="tw-flex tw-text-primary tw-text-left tw-gap-x-4 tw-items-center">
         <button
