@@ -1,3 +1,5 @@
+
+
 services:
   config-server:
     build:
@@ -17,7 +19,7 @@ services:
     ports:
       - "8081:8081"
     volumes:
-      - ./data:/data  # Monta la carpeta data para acceder a la base de datos
+      - ../data:/data  # Monta la carpeta data desde el nivel superior
 
   accounts-server:
     build:
@@ -25,7 +27,7 @@ services:
     ports:
       - "8085:8085"
     volumes:
-      - ./data:/data  # Monta la carpeta data para acceder a la base de datos
+      - ../data:/data  # Monta la carpeta data desde el nivel superior
 
   activities-server:
     build:
@@ -33,7 +35,7 @@ services:
     ports:
       - "8086:8086"
     volumes:
-      - ./data:/data  # Monta la carpeta data para acceder a la base de datos
+      - ../data:/data  # Monta la carpeta data desde el nivel superior
 
   cards-server:
     build:
@@ -41,7 +43,7 @@ services:
     ports:
       - "8087:8087"
     volumes:
-      - ./data:/data  # Monta la carpeta data para acceder a la base de datos
+      - ../data:/data  # Monta la carpeta data desde el nivel superior
 
   users-server:
     build:
@@ -49,7 +51,7 @@ services:
     ports:
       - "8083:8083"
     volumes:
-      - ./data:/data  # Monta la carpeta data para acceder a la base de datos
+      - ../data:/data  # Monta la carpeta data desde el nivel superior
 
   gateway:
     build:
